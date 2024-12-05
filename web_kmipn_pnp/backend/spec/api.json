@@ -1,0 +1,37 @@
+{
+    "header": {
+        "Content-Type": "application/json"
+    },
+    "method": "POST",
+    "nama_dosen": "seterah",
+    "nip_dosen": "200312",
+    "nama_tim": "berhasil",
+    "kategori_lomba": 1,
+    "asal_politeknik": "PNP",
+    "members": [
+        {
+            "member_name": "member 2",
+            "member_nim": "221108****",
+            "member_email": "member1@gmail.com",
+            "member_prodi": "TRPL",
+            "member_ktm": "file.png",
+            "member_nowa": "083180541892"
+        },
+        {
+            "member_name": "member 2",
+            "member_nim": "221108****",
+            "member_email": "member2@gmail.com",
+            "member_prodi": "TRPL",
+            "member_ktm": "file.png",
+            "member_nowa": "083180541892"
+        },
+        {
+            "member_name": "member 3",
+            "member_nim": "221108****",
+            "member_email": "member3@gmail.com",
+            "member_prodi": "TRPL",
+            "member_ktm": "file.png",
+            "member_nowa": "083180541892"
+        }
+    ]
+}

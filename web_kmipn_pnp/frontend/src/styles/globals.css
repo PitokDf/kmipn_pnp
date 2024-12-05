@@ -1,0 +1,130 @@
+@tailwind components;
+@tailwind base;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1b1b1b;
+    --foreground: #ededed;
+  }
+
+  @layer components {
+    .menu .menu-active,
+    .menu .menu-item:hover {
+      background-color: rgb(255, 255, 255);
+      color: black;
+    }
+
+    .sidebar {
+      background-color: rgb(56, 56, 56);
+      color: white;
+    }
+
+    .sidebar .divider {
+      height: max-content;
+      background-color: white;
+    }
+
+    .sidebar-title {
+      color: white;
+    }
+
+    .divider-horizontal:after,
+    .divider-horizontal:before,
+    .divider:after,
+    .divider:before {
+      --tw-bg-opacity: 1;
+      --tw-content: "";
+      background-color: rgb(148, 147, 147);
+      content: var(--tw-content);
+      height: 1px;
+      width: 100%;
+    }
+    .divider-horizontal:after,
+    .divider-horizontal:before,
+    .divider:after,
+    .divider:before {
+      --tw-bg-opacity: 1;
+      --tw-content: "";
+      background-color: rgb(148, 147, 147);
+      content: var(--tw-content);
+      height: 1px;
+      width: 100%;
+    }
+
+    .menu-item {
+      color: white;
+    }
+
+    .card {
+      max-width: 100%;
+      width: 100%;
+    }
+  }
+}
+@media (prefers-color-scheme: light) {
+  @layer components {
+    .menu .menu-active,
+    .menu .menu-item:hover {
+      background-color: rgb(255, 255, 255);
+      color: black;
+    }
+
+    .sidebar {
+      background-color: rgb(49, 49, 49);
+      color: white;
+    }
+
+    .sidebar .divider {
+      height: max-content;
+      background-color: white;
+    }
+
+    .sidebar-title {
+      color: white;
+    }
+
+    .divider-horizontal:after,
+    .divider-horizontal:before,
+    .divider:after,
+    .divider:before {
+      --tw-bg-opacity: 1;
+      --tw-content: "";
+      background-color: rgb(148, 147, 147);
+      content: var(--tw-content);
+      height: 1px;
+      width: 100%;
+    }
+    .divider-horizontal:after,
+    .divider-horizontal:before,
+    .divider:after,
+    .divider:before {
+      --tw-bg-opacity: 1;
+      --tw-content: "";
+      background-color: rgb(148, 147, 147);
+      content: var(--tw-content);
+      height: 1px;
+      width: 100%;
+    }
+
+    .menu-item {
+      color: white;
+    }
+
+    .card {
+      max-width: 100%;
+      width: 100%;
+    }
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}

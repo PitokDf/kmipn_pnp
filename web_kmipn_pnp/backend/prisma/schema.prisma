@@ -1,0 +1,158 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RoleUser {
+  participant
+  admin
+  operator
+}
+
+model User {
+  id         String      @id @default(cuid())
+  email      String      @unique @db.VarChar(125)
+  password   String      @db.VarChar(255)
+  name       String      @db.VarChar(255)
+  verified   Boolean     @default(false)
+  role       RoleUser    @default(participant)
+  createdAt  DateTime    @default(now())
+  userToken  UserToken[]
+  teamMember TeamMember?
+  assesment  Assesment[]
+}
+
+model UserToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Category {
+  id           Int      @id @default(autoincrement())
+  categoriName String   @db.VarChar(100)
+  description  String?
+  deadline     DateTime
+  createdAt    DateTime @default(now())
+  teamCategory Team[]
+}
+
+model Lecture {
+  id        Int      @id @default(autoincrement())
+  name      String
+  nip       String   @db.VarChar(18)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  team      Team[]
+}
+
+model Team {
+  id           Int          @id @default(autoincrement())
+  name         String       @db.VarChar(125)
+  categoryID   Int
+  teamCategory Category     @relation(fields: [categoryID], references: [id], onDelete: Cascade)
+  institution  String
+  lectureID    Int
+  lecture      Lecture      @relation(fields: [lectureID], references: [id], onDelete: Cascade)
+  verified     Boolean      @default(false)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @default(now()) @updatedAt
+  teamMembers  TeamMember[]
+  proposal     Proposal[]
+  submission   Submission?
+}
+
+enum RoleTeamMember {
+  leader
+  member
+}
+
+model TeamMember {
+  id        Int            @id @default(autoincrement())
+  teamId    Int
+  team      Team           @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  userId    String?        @unique
+  user      User?          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      RoleTeamMember
+  nim       String         @db.VarChar(12)
+  name      String
+  email     String
+  no_WA     String
+  prodi     String
+  fileKTM   String
+  createdAt DateTime       @default(now())
+}
+
+enum statusProposal {
+  approve
+  pending
+  rejected
+}
+
+model File {
+  id           String    @id @default(cuid())
+  originalName String
+  fileName     String
+  fileSize     Int
+  type         String
+  path         String
+  createdAt    DateTime  @default(now())
+  proposals    Proposal?
+}
+
+model Proposal {
+  id         Int            @id @default(autoincrement())
+  title      String         @db.VarChar(125)
+  teamId     Int
+  team       Team           @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  fileLink   String?
+  status     statusProposal @default(pending)
+  createdAt  DateTime       @default(now())
+  comments   String?
+  assessment Assesment?
+  fileId     String         @unique
+  file       File           @relation(fields: [fileId], references: [id], onDelete: Cascade)
+}
+
+model Assesment {
+  id         Int      @id @default(autoincrement())
+  proposalID Int      @unique
+  proposal   Proposal @relation(fields: [proposalID], references: [id], onDelete: Cascade)
+  juriID     String
+  user       User     @relation(fields: [juriID], references: [id], onDelete: Cascade)
+  score      Float
+  createdAt  DateTime @default(now())
+}
+
+enum Round {
+  preliminary
+  final
+}
+
+enum statusSubmission {
+  pending
+  passed
+  failed
+}
+
+model Submission {
+  id        Int              @id @default(autoincrement())
+  teamId    Int              @unique
+  team      Team             @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  round     Round
+  status    statusSubmission @default(pending)
+  createdAt DateTime         @default(now())
+}
