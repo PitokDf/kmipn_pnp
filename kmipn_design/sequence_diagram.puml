@@ -1,0 +1,28 @@
+@startuml
+actor Partisipan
+participant "Halaman Login" as LoginPage
+participant "Sistem" as System
+participant "API" as API
+
+Partisipan -> LoginPage: Masukkan email dan password
+LoginPage -> System: Kirim data login
+System -> API: Cek kredensial email dan password
+API --> System: Kredensial valid?
+alt Jika valid
+    System -> System: Generate JWT Token
+    System --> Partisipan: Login berhasil, tampilkan dashboard
+    Partisipan -> System: Klik "Data Tim"
+    System -> System: Tampilkan form melengkapi data tim
+    Partisipan -> System: Masukkan data tim (Nama Tim, Anggota, dll)
+    System -> System: Validasi data tim
+    System -> API: Simpan data tim jika valid
+    API --> System: Data tim disimpan
+    System --> Partisipan: Tampilkan pesan sukses
+else Jika tidak valid
+    System --> Partisipan: Tampilkan pesan error "Email atau password salah"
+end
+
+Partisipan -> System: Klik "Logout"
+System -> System: Hapus session/token
+System --> Partisipan: Logout berhasil
+@enduml

@@ -1,0 +1,31 @@
+@startuml DarkBlue
+left to right direction
+actor Partisipan
+actor Admin
+actor Juri
+
+rectangle "Sistem" {
+  usecase "Lengkapi Data Team" as UC_CompleateTeam
+  usecase "Kelola kategori lomba" as UC_ManageCategori
+  usecase "Lihat Submission" as UC_SeaSubmission
+  usecase "Verifikasi Proposal" as UC_VerifikasiProposal
+  usecase "Verifikasi KTM" as UC_VerifikasiKTM
+  usecase "Kelola Tim" as UC_KelolaTim
+  usecase "Lihat Peserta" as UC_LihatPeserta
+  usecase "Tinjau Hasil Submission" as UC_TinjauHasilSubmission
+  usecase "Beri nilai proposal" as UC_BeriNilaiProposal
+}
+
+Juri --> UC_BeriNilaiProposal
+
+Partisipan --> UC_CompleateTeam
+Partisipan --> UC_SeaSubmission
+
+Admin --> UC_LihatPeserta
+Admin --> UC_VerifikasiProposal
+Admin --> UC_SeaSubmission
+Admin --> UC_VerifikasiKTM
+Admin --> UC_ManageCategori
+Admin --> UC_KelolaTim
+Admin--> UC_TinjauHasilSubmission
+@enduml

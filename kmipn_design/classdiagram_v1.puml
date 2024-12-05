@@ -1,0 +1,122 @@
+@startuml 1
+
+class User {
+    + id: String
+    + email: String
+    + password: String
+    + name: String
+    + verified: Boolean
+    + role: RoleUser
+    + createdAt: DateTime
+    --
+    + authenticate(): Boolean
+    + register(email: String, password: String): User
+    + login(): void
+}
+
+class UserToken {
+    + id: Int
+    + token: String
+    + userId: String
+    + expiresAt: DateTime
+    + createdAt: DateTime
+    --
+    + generateToken(): String
+    + validateToken(token: String): Boolean
+}
+
+class Category {
+    + id: Int
+    + categoryName: String
+    + description: String?
+    + createdAt: DateTime
+    --
+    + createCategory(name: String, description: String): Category
+    + getAllCategori(): categori
+    + addCategori(): categori
+    + deleteCategori(id: integer): void
+    + updateCategori(categori: Categori, id: integer): categori
+}
+
+class Lecture {
+    + id: Int
+    + name: String
+    + nip: String
+    + createdAt: DateTime
+    + updatedAt: DateTime
+    --
+    + assignLecture(name: String, nip: String): Lecture
+}
+
+class Team {
+    + id: Int
+    + name: String
+    + categoryID: Int
+    + institution: String
+    + lectureID: Int
+    + verified: Boolean
+    + createdAt: DateTime
+    + updatedAt: DateTime
+    --
+    + registerTeam(name: String, institution: String, lectureID: Int): Team
+}
+
+class TeamMember {
+    + id: Int
+    + teamId: Int
+    + userId: String?
+    + role: RoleTeamMember
+    + nim: String
+    + name: String
+    + email: String
+    + no_WA: String
+    + prodi: String
+    + fileKTM: String
+    + createdAt: DateTime
+    --
+    + addMember(name: String, nim: String): TeamMember
+}
+
+class Proposal {
+    + id: Int
+    + title: String
+    + teamId: Int
+    + fileLink: String?
+    + status: StatusProposal
+    + createdAt: DateTime
+    --
+    + submitProposal(title: String, fileLink: String): Proposal
+}
+
+class Assessment {
+    + id: Int
+    + proposalID: Int
+    + juriID: String
+    + score: Float
+    + createdAt: DateTime
+    --
+    + assessProposal(proposalID: Int, score: Float): Assessment
+}
+
+class Submission {
+    + id: Int
+    + teamId: Int
+    + round: Round
+    + status: StatusSubmission
+    + createdAt: DateTime
+    --
+    + updateStatusSubmission(proposalID: integer): void
+    + submitRound(round: Round, status: StatusSubmission): Submission
+}
+
+User "1" -- "0..*" UserToken : "tokens"
+User "1" -- "0..*" TeamMember : "members"
+User "1" -- "0..*" Assessment : "assessments"
+Team "1" -- "0..*" TeamMember : "members"
+Team "1" -- "1" Proposal : "proposal"
+Team "1" -- "1" Submission : "submission"
+Proposal "1" -- "0..*" Assessment : "assessments"
+Team "1" -- "1" Category : "category"
+Team "1" -- "1" Lecture : "lecture"
+
+@enduml

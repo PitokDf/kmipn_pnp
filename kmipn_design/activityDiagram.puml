@@ -1,0 +1,28 @@
+@startuml
+start
+:Partisipan membuka halaman login;
+:Partisipan memasukkan email dan password;
+if (Email dan Password valid?) then (Ya)
+    :Sistem memverifikasi kredensial;
+    :Sistem menghasilkan JWT Token;
+    :Partisipan berhasil login;
+    :Sistem menampilkan halaman dashboard;
+    :Partisipan mengklik menu "Data Tim";
+    :Sistem menampilkan form untuk melengkapi data tim;
+    :Partisipan memasukkan data tim (Nama Tim, Anggota, dll);
+    :Partisipan men-submit form;
+    :Sistem memvalidasi data tim;
+    if (Data tim valid?) then (Ya)
+        :Sistem menyimpan data tim ke database;
+        :Sistem menampilkan pesan sukses;
+    else (Tidak)
+        :Sistem menampilkan pesan error;
+    endif
+    :Partisipan mengklik tombol "Logout";
+    :Sistem menghapus session/token;
+    :Partisipan berhasil logout;
+else (Tidak)
+    :Sistem menampilkan pesan kesalahan "Email atau Password salah";
+endif
+stop
+@enduml

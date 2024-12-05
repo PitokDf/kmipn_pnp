@@ -1,0 +1,106 @@
+@startuml ActorFontSize
+
+entity "User" {
+  * id: String [PK]
+    --
+    email: String [Unique]
+    password: String
+    name: String
+    verified: Boolean
+    role: RoleUser
+    createdAt: DateTime
+}
+
+entity "UserToken" {
+  * id: Int [PK]
+    --
+    token: String [Unique]
+    userId: String [FK]
+    expiresAt: DateTime
+    createdAt: DateTime
+}
+
+entity "Category" {
+  * id: Int [PK]
+    --
+    categoriName: String
+    description: String?
+    createdAt: DateTime
+}
+
+entity "Lecture" {
+  * id: Int [PK]
+    --
+    name: String
+    nip: String
+    createdAt: DateTime
+    updatedAt: DateTime
+}
+
+entity "Team" {
+  * id: Int [PK]
+    --
+    name: String
+    categoryID: Int [FK]
+    institution: String
+    lectureID: Int [FK]
+    verified: Boolean
+    createdAt: DateTime
+    updatedAt: DateTime
+}
+
+entity "TeamMember" {
+  * id: Int [PK]
+    --
+    teamId: Int [FK]
+    userId: String? [Unique, FK]
+    role: RoleTeamMember
+    nim: String
+    name: String
+    email: String
+    no_WA: String
+    prodi: String
+    fileKTM: String
+    createdAt: DateTime
+}
+
+entity "Proposal" {
+  * id: Int [PK]
+    --
+    title: String
+    teamId: Int [Unique, FK]
+    fileLink: String?
+    status: statusProposal
+    createdAt: DateTime
+}
+
+entity "Assesment" {
+  * id: Int [PK]
+    --
+    proposalID: Int [Unique, FK]
+    juriID: String [FK]
+    score: Float
+    createdAt: DateTime
+}
+
+entity "Submission" {
+  * id: Int [PK]
+    --
+    teamId: Int [Unique, FK]
+    round: Round
+    status: statusSubmission
+    createdAt: DateTime
+}
+
+User "1" --o{ "userToken" UserToken : "userTokens"
+User "1" --o{ "teamMember" TeamMember : "teamMember"
+User "1" --o{ "assesment" Assesment : "assesment"
+Team "1" --o{ "teamMembers" TeamMember : "teamMembers"
+Team "1" --o{ "proposal" Proposal : "proposal"
+Team "1" --o{ "submission" Submission : "submission"
+TeamMember "1" --o{ "team" Team : "team"
+Proposal "1" --o{ "assessment" Assesment : "assessment"
+Team "1" -- "teamCategory" Category : "category"
+Team "1" -- "lecture" Lecture : "lecture"
+
+@enduml

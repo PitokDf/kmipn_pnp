@@ -1,0 +1,69 @@
+@startuml
+
+entity "User" {
+    *id: Integer [PK]
+    --
+    *email: String
+    *password: String
+    *name: String
+    *role: Enum [participant, admin]
+    *createdAt: DateTime
+    *updatedAt: DateTime
+}
+
+entity "UserToken" {
+    *id: Integer [PK]
+    --
+    *userId: Integer [FK]
+    *token: String
+    *expiresAt: DateTime
+    *createdAt: DateTime
+}
+
+entity "Team" {
+    *id: Integer [PK]
+    --
+    *name: String
+    *category: String
+    *institution: String
+    *createdAt: DateTime
+    *updatedAt: DateTime
+}
+
+entity "TeamMember" {
+    *id: Integer [PK]
+    --
+    *teamId: Integer [FK]
+    *userId: Integer [FK]
+    *role: Enum [leader, member]
+    *createdAt: DateTime
+    *updatedAt: DateTime
+}
+
+entity "Proposal" {
+    *id: Integer [PK]
+    --
+    *teamId: Integer [FK]
+    *fileLink: String
+    *status: Enum [uploaded, pending, verified]
+    *createdAt: DateTime
+    *updatedAt: DateTime
+}
+
+entity "Submission" {
+    *id: Integer [PK]
+    --
+    *teamId: Integer [FK]
+    *round: Enum [preliminary, final]
+    *status: Enum [pending, passed, failed]
+    *createdAt: DateTime
+    *updatedAt: DateTime
+}
+
+User ||--o{ UserToken : mempunyai
+Team ||--|| Proposal : mempunyai
+Team ||--o{ TeamMember : terdiri dari
+User ||--o{ TeamMember : bisa menjadi
+Team ||--o{ Submission : submits
+
+@enduml

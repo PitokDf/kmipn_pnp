@@ -1,0 +1,72 @@
+@startuml
+class User {
+    + id: String
+    + email: String
+    + password: String
+    + name: String
+    + verified: Boolean
+    + role: String
+    + createdAt: DateTime
+    + login(): Token
+    + register(): Token
+}
+
+class UserToken {
+    + id: Int
+    + token: String
+    + expiresAt: DateTime
+    + createdAt: DateTime
+    + createToken(user: User): String
+    + verifyToken(token: String): Boolean
+}
+
+class Team {
+    + id: Int
+    + name: String
+    + institution: String
+    + createdAt: DateTime
+    + addTeam(team: Team): void
+}
+
+class TeamMember {
+    + id: Int
+    + role: String
+    + createdAt: DateTime
+    + addMember(member: TeamMember): void
+}
+
+class Category {
+    + id: Int
+    + categoryName: String
+    + description: String
+    + createdAt: DateTime
+    + getAllCategori(): void
+    + addCategori(): void
+    + deleteCategori(id: integer): void
+    + updateCategori(categori: Categori, id: integer): void
+}
+
+class Proposal {
+    + id: Int
+    + fileLink: String
+    + status: String
+    + createdAt: DateTime
+    + submitProposal(team: Team, file: String): void
+    + verifyProposal(): void
+}
+
+class Submission {
+    + id: Int
+    + round: String
+    + status: String
+    + createdAt: DateTime
+    + updateStatusSubmission(proposalID: integre): void
+}
+
+User "1" -- "1" UserToken: has
+User "1" -- "0..1" TeamMember: is
+Team "1" -- "0..*" TeamMember: has
+Team "1" -- "1" Category: belongs to
+Team "1" -- "0..1" Proposal: submits
+Team "1" -- "0..*" Submission: makes
+@enduml
