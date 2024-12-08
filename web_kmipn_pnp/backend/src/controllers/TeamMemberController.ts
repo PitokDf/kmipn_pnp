@@ -142,6 +142,7 @@ export const getTeamMemberByUserID = async (req: Request, res: Response<Response
         const isPrposalrejected = lastestProposal?.status === "rejected" ? true : false;
         const submission = teamMember.team.submission;
         const dataMap = {
+            teamID: teamMember.teamId,
             teamName: teamMember.team.name,
             categori: teamMember.team.teamCategory.categoriName,
             institution: teamMember.team.institution,

@@ -41,6 +41,8 @@ export default function AddUser() {
                 mutate("/api/v1/users")
             }
         } catch (error: any) {
+            console.log(error);
+
             const errorCode = error.status;
             if (errorCode === 400) {
                 const errors = error.response.data.errors;

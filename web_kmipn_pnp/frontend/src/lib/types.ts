@@ -49,6 +49,7 @@ export interface User {
 }
 
 export interface teamMemberType {
+    teamID: number;
     id?: number,
     teamName: string,
     categori: string,

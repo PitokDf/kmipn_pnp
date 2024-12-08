@@ -26,7 +26,7 @@ export default function EditCategory({ data }: { data: Categories }) {
         setErrors({ categoriName: null })
     }
 
-    useEffect(() => { setForm({ categoriName: data.categoriName, description: data.description }) }, [])
+    useEffect(() => { setForm({ categoriName: data.categoriName, description: data.description }) }, [data.categoriName])
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setForm({

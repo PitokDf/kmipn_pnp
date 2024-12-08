@@ -62,3 +62,11 @@ export const updateProposalService = async (id: number, status: $Enums.statusPro
     await db.proposal.update({ where: { id: Number(id) }, data: { comments: comments, status } });
     return proposal;
 }
+
+export const getAllproposalAproveServices = async () => {
+    const approvedProposal = await db.proposal.findMany({
+        where: { status: "approve" }, include: { file: true, team: true }
+    });
+
+    return approvedProposal;
+}

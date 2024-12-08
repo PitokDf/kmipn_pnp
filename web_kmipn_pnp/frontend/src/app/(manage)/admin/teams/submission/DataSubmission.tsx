@@ -3,22 +3,21 @@
 import TablePagination from "@/components/Table/TablePagination";
 import { fetcher } from "@/lib/api";
 import { submission, Team } from "@/lib/types";
-import { faLink } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useSWR from "swr";
 import ApproveSubmision from "./ApproveSubmission";
 
 export default function DataSubmissions() {
     const { data: data, error } = useSWR("/api/v1/submissions", fetcher);
-    if (!data) { console.log("sedang mengambil data."); return; }
+
     if (error) { console.log("terjadi masalah saat mengambil data.") }
 
-    const submissions: submission[] = data.data;
+    const submissions: submission[] = data?.data || [];
 
     return (
         <>
             <TablePagination
                 data={submissions}
+                loading={!data}
                 columns={[
                     { header: "No", key: null, render: (row, index) => index + 1 },
                     { header: "Status", key: "status" },

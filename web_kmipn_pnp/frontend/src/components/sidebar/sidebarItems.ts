@@ -1,5 +1,6 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faBaby, faDashboard, faPeopleGroup, faSliders, faUser, faUsers, faUsersCog } from "@fortawesome/free-solid-svg-icons";
+import { faDashboard, faPeopleGroup, faSliders, faUser, faUsers, faUsersCog } from "@fortawesome/free-solid-svg-icons";
+import { Key } from "swr";
 
 interface sidebarSubMenu {
     title: string,
@@ -9,12 +10,13 @@ interface sidebarSubMenu {
 interface sidebarMenu {
     title: string,
     icon: IconProp,
+    access: Array<"admin" | "participant" | "operator">,
     route: string,
     children?: sidebarSubMenu[]
 }
 
 interface sidebarItem {
-    access: "admin" | "participant" | "juri",
+    access: Array<"admin" | "participant" | "operator">,
     title: string,
     children: sidebarMenu[]
 }
@@ -22,34 +24,38 @@ interface sidebarItem {
 export const SidebarItems: sidebarItem[] =
     [
         {
-            title: "Dashboard Admin",
-            access: "admin",
+            title: "Dashboard",
+            access: ["admin", "operator"],
             children: [
                 {
                     icon: faDashboard,
                     route: "/admin",
-                    title: "Dashboard"
+                    title: "Dashboard",
+                    access: ["admin", "operator"],
                 }
             ]
         },
         {
             title: "Menu Lainnya",
-            access: "admin",
+            access: ["admin", "operator"],
             children: [
                 {
                     icon: faSliders,
                     route: "/admin/categories",
-                    title: "Kategori"
+                    title: "Kategori",
+                    access: ["admin", "operator"],
                 },
                 {
                     icon: faUsers,
                     route: "/admin/users",
-                    title: "Users"
+                    title: "Users",
+                    access: ["admin"]
                 },
                 {
                     icon: faPeopleGroup,
                     route: "#",
                     title: "Manajemen Tim",
+                    access: ["admin", "operator"],
                     children: [
                         {
                             route: "/admin/teams/all",
@@ -69,23 +75,25 @@ export const SidebarItems: sidebarItem[] =
         },
         {
             title: "Dashboard Peserta",
-            access: "participant",
+            access: ["participant"],
             children: [
                 {
                     icon: faDashboard,
                     route: "/participant",
-                    title: "Dashboard"
+                    title: "Dashboard",
+                    access: ["participant"]
                 }
             ]
         },
         {
             title: "Menu Lainnya",
-            access: "participant",
+            access: ["participant"],
             children: [
                 {
                     icon: faUsersCog,
                     route: "/participant/team",
-                    title: "Team"
+                    title: "Team",
+                    access: ["participant"]
                 }
             ]
         }

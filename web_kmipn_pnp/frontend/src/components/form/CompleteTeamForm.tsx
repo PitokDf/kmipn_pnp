@@ -15,9 +15,9 @@ export default function CompleteTeamForm() {
     const [dataTeams, setDataTeams] = useState({ nama_tim: "sww", kategori: "", asal_pt: "", dosen_pedamping: "dsad", nip_dosen: "222222222222" });
     const [teamMembers, setTeamMembers] = useState([
         { nama_anggota: 'ini', nim: '222222', no_wa: '084123123', email: 'test@gmail.com', prodi: 'trpl', foto_ktm: null as File | null },
-        { nama_anggota: 'ini', nim: '222222', no_wa: '084123123', email: 'test@gmail.com', prodi: 'trpl', foto_ktm: null as File | null },
         { nama_anggota: 'ini', nim: '222222', no_wa: '084123123', email: 'test@gmail.com', prodi: 'trpl', foto_ktm: null as File | null }
     ]);
+    const memberInput = { nama_anggota: 'ini', nim: '222222', no_wa: '084123123', email: 'test@gmail.com', prodi: 'trpl', foto_ktm: null as File | null };
 
     const { data: data } = useSWR("/api/v1/check-team-compleate", fetcher);
     const checked = data ? data.complete : false;
@@ -54,6 +54,17 @@ export default function CompleteTeamForm() {
             }
             setTeamMembers(newTeamMembers)
         }
+
+    const handleAddOrDeleteMoreMember = () => {
+        if (teamMembers.length === 3) {
+            setTeamMembers((prev) => prev.slice(0, -1))
+        } else {
+            setTeamMembers((prev) => [
+                ...prev,
+                { ...memberInput }
+            ])
+        }
+    }
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -245,9 +256,10 @@ export default function CompleteTeamForm() {
                             </div>
                         </div>
                     ))}
+                    <button type="button" onClick={handleAddOrDeleteMoreMember} className={`btn btn-md mt-3 ${teamMembers.length === 3 ? 'btn-error' : 'btn-success'} w-full`}>{teamMembers.length === 3 ? "Delete row" : "Add more"}</button>
                 </div>
-                <div className="card shadow-lg">
-                    <button type="submit" className={`btn btn-md btn-warning mt-3 ${isLoading && 'btn-loading'}`}>{isLoading ? "Submiting..." : "Submit"}</button>
+                <div className="">
+                    <button type="submit" className={`btn btn-md btn-warning mt-3 ${isLoading && 'btn-loading'} w-full`}>{isLoading ? "Submiting..." : "Submit"}</button>
                 </div>
             </form>
         </div>

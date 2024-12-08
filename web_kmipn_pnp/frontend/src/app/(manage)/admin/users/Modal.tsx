@@ -63,7 +63,7 @@ export default function ModalUser({ isOpen, title, onClose, handleSubmit, handle
                         >
                             <option value="">-- pilih role --</option>
                             <option value="admin">Admin</option>
-                            <option value="juri">Juri</option>
+                            <option value="operator">Operator</option>
                         </select>
                         {
                             errors?.role && (

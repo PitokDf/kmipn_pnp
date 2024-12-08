@@ -12,7 +12,7 @@ import Logout from "../Logout";
 export const Sidebar = () => {
     const pathName = usePathname()
     const session: any = useSession();
-    const roleUser: "admin" | "participant" | "juri" = session.data?.user?.role;
+    const roleUser: "admin" | "participant" | "operator" = session.data?.user?.role;
 
     return (
         <div className="sm:w-full sm:max-w-[18rem] z-50">
@@ -37,12 +37,12 @@ export const Sidebar = () => {
                         ) : (
                             <nav className="menu rounded-md">
                                 {
-                                    SidebarItems.filter((item) => item.access === roleUser).map((sdbr, index) => (
+                                    SidebarItems.filter((item) => item.access.includes(roleUser)).map((sdbr, index) => (
                                         <React.Fragment key={"fragment-" + index}>
                                             <section key={"sidebar-" + index} className="menu-section px-4">
                                                 <span className="menu-title">{sdbr.title}</span>
                                                 <ul key={`sidebar-ul-${index}`} className="menu-items ">
-                                                    {sdbr.children.sort((a, b) => a.title.localeCompare(b.title)).map((sdbItem, index_) =>
+                                                    {sdbr.children.sort((a, b) => a.title.localeCompare(b.title)).filter((item) => item.access.includes(roleUser)).map((sdbItem, index_) =>
                                                         sdbItem.children ? (
                                                             <li key={"sidebar-item-" + index_}>
                                                                 <input type="checkbox" id={"sidebar-menu-" + index + index_} className="menu-toggle" />

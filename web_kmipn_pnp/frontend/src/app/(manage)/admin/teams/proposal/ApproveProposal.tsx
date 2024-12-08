@@ -1,6 +1,5 @@
 import ModalCustom from "@/components/modal/Modal";
 import { api } from "@/lib/api";
-import { handleInputChange } from "@/lib/others_required";
 import { Proposal } from "@/lib/types";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

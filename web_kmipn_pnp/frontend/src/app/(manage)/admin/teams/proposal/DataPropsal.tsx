@@ -12,14 +12,14 @@ import ApproveProposal from "./ApproveProposal";
 
 export default function DataProsals() {
     const { data: data, error } = useSWR("/api/v1/proposals", fetcher);
-    if (!data) { console.log("sedang mengambil data."); return; }
     if (error) { console.log("terjadi masalah saat mengambil data.") }
 
-    const proposals: Proposal[] = data.data;
+    const proposals: Proposal[] = data?.data || [];
 
     return (
         <>
             <TablePagination
+                loading={!data}
                 data={proposals}
                 columns={[
                     { header: "No", key: null, render: (row, index) => index + 1 },
@@ -41,7 +41,7 @@ export default function DataProsals() {
                         key: null,
                         render: (row) => {
                             return (
-                                <a href={row.fileLink} target="_blank" className="link-primary flex items-center gap-2">
+                                <a href={row.fileLink} target="_blank" className="link-primary max-w-max flex items-center gap-1">
                                     lihat proposal
                                     <FontAwesomeIcon icon={faLink} />
                                 </a>

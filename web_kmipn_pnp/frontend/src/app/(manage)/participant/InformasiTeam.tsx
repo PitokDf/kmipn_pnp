@@ -3,23 +3,49 @@
 import UploadProposal from "@/components/form/UploadProposal";
 import { fetcher } from "@/lib/api";
 import { teamMemberType } from "@/lib/types";
-import { faBarsStaggered, faFileAlt, faFlagCheckered, faMedal, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faFileAlt, faFlagCheckered, faMedal, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Pusher from "pusher-js";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 import useSWR from "swr";
 
 export default function InformasiTeam() {
-    const { data: data, error } = useSWR("/api/v1/team-member", fetcher);
+    const { data, error } = useSWR("/api/v1/team-member", fetcher);
 
+    // Hook selalu dipanggil
+    useEffect(() => {
+        if (!data) return; // Early exit kalau data belum siap
+
+        const pusher = new Pusher(process.env.PUSHER_KEY || "2d5de132baafe30a0e42", {
+            cluster: process.env.PUSHER_CLUSTER || "eu",
+        });
+
+        const channel = pusher.subscribe(`team-${data.data.teamID}`);
+
+        channel.bind("proposal-status", (data: any) => {
+            toast.info(data.message, {
+                style: { accentColor: "ButtonShadow" },
+                autoClose: false
+            });
+        });
+
+        return () => {
+            channel.unbind_all();
+            channel.unsubscribe();
+        };
+    }, [data]);
+
+    // Conditional rendering di dalam JSX
     if (error) {
-        console.log('terjadi masalah'); return;
+        return <div>Terjadi masalah saat memuat data.</div>;
     }
 
     if (!data) {
-        console.log("loading data"); return;
+        return <div>Loading data...</div>;
     }
 
     const teamData: teamMemberType = data.data;
-    console.log(teamData);
 
     return (
         <>
@@ -67,39 +93,24 @@ export default function InformasiTeam() {
                     <span className="mb-2">{teamData.lectureName} ({teamData.lectureNip})</span>
                     <h1 className="font-bold">Proposal</h1>
                     <span className="mb-2">
-                        {
-                            // teamData.verified ?
-                            //     teamData.linkProposal ?
-                            //         <a href={teamData.linkProposal} className="font-normal text-blue-600" target="_blank">
-                            //             {teamData?.linkProposal.split('/')[4]}
-                            //         </a> :
-                            //         (teamData.isPrposalrejected ?
-                            //             <>
-                            //                 <span className="text-error">{teamData.reasonRejected}, upload ulang proposal!.</span>
-                            //                 <UploadProposal />
-                            //             </> :
-                            //             <>
-                            //                 <UploadProposal />
-                            //             </>
-                            //         ) :
-                            //     <span className="text-warning">Menunggu diverifikasi admin.</span>
-                            teamData.verified ?
-                                (
-                                    teamData.isPrposalrejected ?
-                                        <>
-                                            <span className="text-error">{teamData.reasonRejected}, upload ulang proposal!.</span>
-                                            <UploadProposal />
-                                        </>
-                                        : (
-                                            teamData.linkProposal ?
-                                                <a href={teamData.linkProposal} className="font-normal text-blue-600" target="_blank">
-                                                    {teamData?.linkProposal.split('/')[4]}
-                                                </a> :
-                                                <UploadProposal />
-                                        )
-                                ) :
-                                <span className="text-warning">Menunggu diverifikasi admin.</span>
-                        }
+                        {teamData.verified ? (
+                            teamData.isPrposalrejected ? (
+                                <>
+                                    <span className="text-error">{teamData.reasonRejected}, upload ulang proposal!.</span>
+                                    <UploadProposal />
+                                </>
+                            ) : (
+                                teamData.linkProposal ? (
+                                    <a href={teamData.linkProposal} className="font-normal text-blue-600" target="_blank">
+                                        {teamData?.linkProposal.split('/')[4]}
+                                    </a>
+                                ) : (
+                                    <UploadProposal />
+                                )
+                            )
+                        ) : (
+                            <span className="text-warning">Menunggu diverifikasi admin.</span>
+                        )}
                     </span>
                 </div>
             </div>

@@ -9,7 +9,7 @@ export default function RegisterForm() {
     const [form, setForm] = useState({ email: "", name: "", password: "" });
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({ email: null, name: null, password: null });
-    const [otherError, setOtherError] = useState();
+    const [otherError, setOtherError] = useState<string | null>();
     const [successMsg, setSuccessMsg] = useState();
 
     const handleInputChang = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,6 +18,7 @@ export default function RegisterForm() {
 
     const clear = () => {
         setErrors({ email: null, name: null, password: null });
+        setOtherError(null);
         setForm({ email: "", name: "", password: "" });
     }
 

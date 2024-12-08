@@ -16,9 +16,7 @@ export default function DataCategories() {
         return
     }
 
-    if (!data) return (<h1>Loading</h1>);
-
-    const categories: Categories[] = data.data;
+    const categories: Categories[] = data?.data || [];
     const filterCategories = categories.map((category) => ({
         ...category,
         description: category.description || "~"
@@ -27,6 +25,7 @@ export default function DataCategories() {
     return (
         <>
             <TablePagination
+                loading={!data}
                 className={"table-compact"}
                 data={filterCategories}
                 columns={[

@@ -6,15 +6,12 @@ import { createCategory, deleteCategory, getAllCategory, getAllCategoryClose, up
 import { loginValidator } from "../validators/LoginValidator";
 import { createTeam, getDataTeam } from "../controllers/TeamController";
 import { createLecture } from "../controllers/LectureController";
-import { createProposal, deleteProposal, getAllproposal, updateProposal } from "../controllers/ProposalController";
-import { getTeamMemberByUserID, saveTeamMember, storeTeamMember, verifyTeam } from "../controllers/TeamMemberController";
-import { checkDataCompleate } from "../middlewares/checkDataCompleate";
+import { createProposal, deleteProposal, downloadAllProposal, getAllproposal, updateProposal } from "../controllers/ProposalController";
+import { getTeamMemberByUserID, saveTeamMember, verifyTeam } from "../controllers/TeamMemberController";
 import { userLogin } from "../config/jwt";
 import { addUserValidator, updateUserValidator } from "../validators/userValidator";
 import { updateCategoriValidator } from "../validators/CategoriValidator";
 import { uploadFile } from "../middlewares/mutlerUploadFile";
-import { uploadHandler } from "../middlewares/uploadKtm";
-import { db } from "../config/database";
 import { RegisterValidator } from "../validators/RegisterValidator";
 import { getAllSubmissions } from "../controllers/SubmissionController";
 import { getInfoDashboardAdmin } from "../controllers/DashboardController";
@@ -55,6 +52,7 @@ router.post("/upload-proposal", authenticateJWT, uploadFile.single("file_proposa
 router.get("/proposals", authenticateJWT, getAllproposal);
 router.delete("/proposals/:id", authenticateJWT, deleteProposal);
 router.put("/proposals/:id", authenticateJWT, updateProposal);
+router.get("/download-proposal", authenticateJWT, downloadAllProposal);
 router.post(
     "/save-team-member",
     authenticateJWT,

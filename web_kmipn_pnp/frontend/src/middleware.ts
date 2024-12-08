@@ -15,8 +15,12 @@ const allowedPathByRole: { [key: string]: string[] } = {
         "/admin/teams/all",
         "/admin/users",
     ],
-    "juri": [
-        "/juri"
+    "operator": [
+        "/admin",
+        "/admin/categories",
+        "/admin/teams/proposal",
+        "/admin/teams/submission",
+        "/admin/teams/all"
     ]
 }
 
@@ -37,7 +41,6 @@ export async function middleware(req: NextRequest) {
 
         const currentTime = Math.floor(new Date().getTime() / 1000)
         const expire = token.exp;
-        console.log(currentTime);
         // jika token sudah expire, maka redirect pengguna ke halaman login
         if (currentTime > expire) {
             // jika si pengguna sudah di halaman login, yasudah biarin.
@@ -48,22 +51,18 @@ export async function middleware(req: NextRequest) {
             return NextResponse.redirect(new URL("/auth/login", req.nextUrl))
         }
 
-        const roleUser: "admin" | "participant" | "juri" = token.user.role;
+        const roleUser: "admin" | "participant" | "operator" = token.user.role;
         const teamDataCompleate = token.teamDataCompleate;
 
         req.headers.set("Authorization", `Bearer ${token.accessToken}`);
 
-        if (roleUser === "admin") {
+        if (roleUser === "admin" || roleUser === "operator") {
             if (pathname.startsWith("/auth/login") || pathname.startsWith("/auth/register")) {
                 return NextResponse.redirect(new URL("/admin", req.nextUrl))
             }
         } else if (roleUser === "participant") {
             if (pathname.startsWith("/auth/login") || pathname.startsWith("/auth/register")) {
                 return NextResponse.redirect(new URL("/participant", req.nextUrl))
-            }
-        } else if (roleUser === "juri") {
-            if (pathname.startsWith("/auth/login") || pathname.startsWith("/auth/register")) {
-                return NextResponse.redirect(new URL("/juri", req.nextUrl));
             }
         }
 
@@ -90,5 +89,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/auth/login", "/auth/register", "/admin/:path*", "/participant/:path*", "/juri/:path*"]
+    matcher: ["/auth/login", "/auth/register", "/admin/:path*", "/participant/:path*"]
 }

@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import DataProsals from "./DataPropsal";
+import DownloadProposal from "./DownloadProposal";
 
 export const metadata: Metadata = {
     title: 'Proposal Team',
@@ -14,7 +15,7 @@ export default function ProposalPage() {
                 <div className="card-body">
                     <h1 className="text-xl font-semibold mb-3">Manage Propsals</h1>
                     <div className="flex justify-end mb-3">
-                        {/* <AddUser /> */}
+                        <DownloadProposal />
                     </div>
                     <DataProsals />
                 </div>

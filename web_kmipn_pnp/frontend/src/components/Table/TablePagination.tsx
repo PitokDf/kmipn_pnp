@@ -19,6 +19,8 @@ type TableProps<T extends Record<string, React.ReactNode>> = {
     }
 }
 
+const skeletonLength = Array.from({ length: 5 })
+
 export default function TablePagination<T extends Record<string, React.ReactNode>>({
     data,
     columns,
@@ -27,7 +29,50 @@ export default function TablePagination<T extends Record<string, React.ReactNode
     emptyState = "No data available in table.",
     search
 }: TableProps<T>) {
-    if (loading) return <p>Loading...</p>
+    if (loading) return (
+        <>
+            <div className="flex justify-between mb-3">
+                <div className="flex items-center gap-2">
+                    <div className="skeleton h-6 w-12 rounded-lg"></div>
+                    <div className="skeleton h-7 w-12 rounded-lg"></div>
+                </div>
+                <div className="flex items-center gap-2">
+                    <div className="skeleton h-6 w-12 rounded-lg"></div>
+                    <div className="skeleton h-7 w-48 rounded-lg"></div>
+                </div>
+            </div>
+            <div className="flex w-full overflow-x-auto">
+                <table className={`table ${className}`}>
+                    <thead>
+                        <tr>
+                            {
+                                columns.map((col, index) => (
+                                    <th key={index}>
+                                        <div className="skeleton h-5 rounded-md"></div>
+                                    </th>
+                                ))
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            skeletonLength.map((col, index) => (
+                                <tr key={index}>
+                                    {
+                                        columns.map((col, index) => (
+                                            <th key={index}>
+                                                <div className="skeleton h-5 rounded-md"></div>
+                                            </th>
+                                        ))
+                                    }
+                                </tr>
+                            ))
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </>
+    )
 
     const [searchKey, setSearchKey] = useState<string>("");
     const [itemPerPage, setItemPerPage] = useState(10);
@@ -49,6 +94,7 @@ export default function TablePagination<T extends Record<string, React.ReactNode
             setCurrentPage(page)
         }
     }
+
 
     return (
         <>

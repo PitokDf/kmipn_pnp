@@ -6,14 +6,20 @@ import { User } from "@/lib/types";
 import useSWR from "swr";
 import EditeUser from "./EditeUser";
 import DeleteUser from "./DeleteUser";
+import { useState } from "react";
 
 export default function DataUsers() {
-    const { data: data, error } = useSWR("/api/v1/users", fetcher);
+    const { data: data, error } = useSWR("/api/v1/users", fetcher, { revalidateOnReconnect: true, keepPreviousData: true });
 
-    if (!data) { console.log("loading"); return }
-    if (error) { console.log("terjadi kesalahan"); return }
+    if (!data) {
+        console.log("loading");
 
-    const users: User[] = data.data;
+    }
+    if (error) {
+        console.log("terjadi kesalahan");
+    }
+    const users: User[] = data?.data || [];
+
     const filterUsers = users.map((user) => ({
         ...user
     }));
@@ -23,6 +29,7 @@ export default function DataUsers() {
             <TablePagination
                 className={"table-compact"}
                 data={filterUsers}
+                loading={!data}
                 columns={[
                     { header: "No", key: null, render: (row, index) => index + 1 },
                     { header: "Nama Pengguna", key: "name" },

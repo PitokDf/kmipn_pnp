@@ -1,6 +1,6 @@
+import { RoleUser } from "@prisma/client";
 import { db } from "../config/database"
 import { AppError } from "../utils/AppError";
-import { RoleUser } from "@prisma/client";
 import { sendEmailVerfikasi } from "./AuthService";
 
 export const GetAllUser = async () => {
@@ -73,7 +73,7 @@ export const addUserService = async (email: string, password: string, name: stri
     if (user) throw new AppError("Email already exists", 400);
     // menambahkan data user ke database
     const newUser = await db.user.create({ data: { email, password, name, role } });
-    await sendEmailVerfikasi(newUser);
+    await sendEmailVerfikasi(newUser, password);
     // jika gagal menambahan data lempar error
     if (!newUser) throw new AppError("Failed add new user", 400);
     // jika tidak ada error kembalikan data user yang baru dicreate

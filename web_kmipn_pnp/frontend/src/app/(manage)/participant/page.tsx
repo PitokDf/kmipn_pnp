@@ -4,6 +4,7 @@ import InformasiTeam from "./InformasiTeam";
 export const metadata: Metadata = {
     title: 'Dashboard Peserta',
 };
+
 export default function ParticipantDashboard() {
 
     return (

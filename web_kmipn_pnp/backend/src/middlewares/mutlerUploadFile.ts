@@ -4,7 +4,7 @@ import path from "path";
 
 export const uploadDir = path.join(__dirname, '../../public')
 
-const storage = multer.diskStorage({
+export const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const { type } = req.query;
         const uploadDir = './public/' + type;
@@ -18,7 +18,6 @@ const storage = multer.diskStorage({
         const fileName = uniqueSuffix + '-' + file.originalname;
         cb(null, fileName)
     }
-
 });
 
 export const uploadFile = multer({ storage });
