@@ -18,7 +18,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         style={{ color: "inherit" }}
                     />
                 </label>
-                <div className="my-4 gap-4">
+                <div className="my-4 gap-4 ">
                     <AppProgressBar
                         color="#29d"
                         shallowRouting={true}

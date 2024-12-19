@@ -1,7 +1,5 @@
-import { api, loginUser } from "@/lib/api";
 import { AuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google"
 
 export const authOptions: AuthOptions = {
     providers: [

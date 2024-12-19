@@ -46,9 +46,10 @@ export const updateCategory = async (req: Request, res: Response<ResponseApi>) =
 
         const { id } = req.params
         const { categoriName, description, deadline } = req.body
-        const updatedCategory = await updateCategoryService(Number(id), categoriName, description, deadline);
+        const convertDeadline = new Date(deadline);
+        const updatedCategory = await updateCategoryService(Number(id), categoriName, description, convertDeadline);
         return res.status(200).json({ success: true, statusCode: 200, msg: "Successfully update category", data: updatedCategory })
-    } catch (error) {
+    } catch (error: any) {
         if (error instanceof AppError) {
             return res.status(error.statusCode).json({
                 success: false, statusCode: error.statusCode, msg: error.message, errors: error.message
@@ -56,7 +57,7 @@ export const updateCategory = async (req: Request, res: Response<ResponseApi>) =
         }
 
         return res.status(500).json({
-            success: false, statusCode: 500, msg: "Internal server error", errors: error
+            success: false, statusCode: 500, msg: "Internal server error", errors: error.message
         })
     }
 }

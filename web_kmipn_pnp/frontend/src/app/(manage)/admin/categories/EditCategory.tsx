@@ -11,9 +11,9 @@ import { mutate } from "swr";
 
 export default function EditCategory({ data }: { data: Categories }) {
     const modalCheckBox = useRef(null);
-    const [form, setForm] = useState<{ categoriName: string | null, description: string | null }>({ categoriName: null, description: null });
+    const [form, setForm] = useState<{ categoriName: string | null, description: string | null, deadline: string | null }>({ categoriName: null, description: null, deadline: null });
     const [isLoading, setIsLoading] = useState(false);
-    const [errors, setErrors] = useState({ categoriName: null })
+    const [errors, setErrors] = useState({ categoriName: null, deadline: null })
 
     const handleCloseModal = () => {
         if (modalCheckBox.current) {
@@ -23,10 +23,10 @@ export default function EditCategory({ data }: { data: Categories }) {
     }
 
     const clear = () => {
-        setErrors({ categoriName: null })
+        setErrors({ categoriName: null, deadline: null })
     }
 
-    useEffect(() => { setForm({ categoriName: data.categoriName, description: data.description }) }, [data.categoriName])
+    useEffect(() => { setForm({ categoriName: data.categoriName, description: data.description, deadline: data.deadline }) }, [data.categoriName])
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setForm({
@@ -86,12 +86,28 @@ export default function EditCategory({ data }: { data: Categories }) {
                                 required
                                 placeholder="IOT"
                                 name="categoriName"
-                                value={form.categoriName ?? data.categoriName}
+                                value={form.categoriName || ""}
                                 onChange={(e) => handleInputChange(e)}
                             />
                             {errors.categoriName && (
                                 <label className="form-label">
                                     <span className="form-label-alt text-error">{errors.categoriName}</span>
+                                </label>
+                            )}
+                        </div>
+                        <div className="form-field">
+                            <label htmlFor="" className="form-label">Deadline</label>
+                            <input
+                                type="date"
+                                className={`input max-w-full ${errors.deadline && "input-error"}`}
+                                required
+                                name="deadline"
+                                value={new Date(form.deadline!).toISOString().split("T")[0] || ""}
+                                onChange={(e) => handleInputChange(e)}
+                            />
+                            {errors.deadline && (
+                                <label className="form-label">
+                                    <span className="form-label-alt text-error">{errors.deadline}</span>
                                 </label>
                             )}
                         </div>
@@ -103,7 +119,7 @@ export default function EditCategory({ data }: { data: Categories }) {
                                 required
                                 placeholder="IOT adalah"
                                 name="description"
-                                value={form.description ?? data.description ?? 'no description'}
+                                value={form.description || ""}
                                 onChange={(e) => handleInputChange(e)}
                             />
                         </div>

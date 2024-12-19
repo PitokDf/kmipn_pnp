@@ -43,7 +43,8 @@ router.post('/login', loginValidator(), login);
 router.post('/verify-email', verifyEmail);
 router.post('/logout', logout);
 
-router.get("/submissions", authenticateJWT, getAllSubmissions)
+router.get("/submissions", authenticateJWT, getAllSubmissions);
+router.put("/submissions", authenticateJWT)
 
 router.post("/lecture", authenticateJWT, createLecture);
 router.post("/team", authenticateJWT, createTeam);

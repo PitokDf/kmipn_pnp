@@ -10,7 +10,7 @@ export const loginUser = async (email: string, password: string) => {
 };
 
 export const api = axios.create({
-    baseURL: "http://localhost:2003",
+    baseURL: "http://192.168.101.41:2003",
     timeout: 1000000
 })
 

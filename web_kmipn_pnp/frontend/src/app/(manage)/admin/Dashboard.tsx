@@ -7,50 +7,140 @@ import { fetcher } from "@/lib/api";
 import { borderColor } from "@/lib/others_required";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
 export default function DashboardPage() {
-    const { data: data, error } = useSWR("/api/v1/admin/dashboard", fetcher);
-    if (error) { console.log("error"); return; }
-    const categoryInfo = data?.category || [];
-    console.log(data);
+    const { data: dashboardData, error } = useSWR("/api/v1/admin/dashboard", fetcher);
+
+    if (error) {
+        console.log("Error fetching data");
+        return <p className="text-red-500 dark:text-red-300">Failed to load dashboard data</p>;
+    }
+
+    const categoryInfo = dashboardData?.category || [];
+    const recentTeams = dashboardData?.recentTeams || [];
 
     return (
-        <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-6 gap-6">
-                <div className="card">
-                    <div className="card-body">
-                        <h3 className="text-xl font-semibold text-gray-700">Total Tim Terdaftar</h3>
-                        <p className="text-xl font-bold text-blue-600">{data?.totalTeam}</p>
+        <div className="p-4 sm:p-6 lg:p-8 transition-colors duration-300">
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">Dashboard</h1>
+
+            {/* Stats Section */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                {[
+                    {
+                        title: "Total Tim Terdaftar",
+                        value: dashboardData?.totalTeam || 0,
+                        color: "bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-100",
+                    },
+                    {
+                        title: "Proposal Pending",
+                        value: dashboardData?.proposalsPending || 0,
+                        color: "bg-yellow-100 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-100",
+                    },
+                    {
+                        title: "Proposal Diverifikasi",
+                        value: dashboardData?.proposalsVerified || 0,
+                        color: "bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-100",
+                    },
+                ].map((stat, index) => (
+                    <div
+                        key={index}
+                        className={`rounded-lg shadow-lg dark:shadow-none p-6 flex flex-col items-center ${stat.color} hover:shadow-xl transition-shadow`}
+                    >
+                        <h3 className="text-lg font-semibold mb-2">{stat.title}</h3>
+                        <p className="text-3xl font-bold">{stat.value}</p>
                     </div>
-                </div>
-                <div className="card">
-                    <div className="card-body">
-                        <h3 className="text-xl font-semibold text-gray-700">Proposal Pending</h3>
-                        <p className="text-xl font-bold text-yellow-500">{data?.proposalsPending}</p>
-                    </div>
-                </div>
-                <div className="card">
-                    <div className="card-body">
-                        <h3 className="text-xl font-semibold text-gray-700">Proposal Diverifikasi</h3>
-                        <p className="text-xl font-bold text-green-600">{data?.proposalsVerified}</p>
-                    </div>
-                </div>
+                ))}
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-[3fr_1fr]">
-                <div className="card">
-                    <div className="card-body h-[500px] w-full">
-                        <Bar data={{
-                            labels: categoryInfo.labels,
-                            datasets: [{
-                                data: categoryInfo.data,
-                                label: "Banyak Tim per Kategori",
-                                backgroundColor: borderColor,
-                            }]
-                        }}
-                            options={{ responsive: true, maintainAspectRatio: false }}
-                            height={500} />
+
+            {/* Chart Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                <div className="lg:col-span-2 bg-white dark:bg-gray-800 shadow-lg dark:shadow-none rounded-lg p-6">
+                    <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Banyak Tim per Kategori</h3>
+                    <div className="h-64">
+                        <Bar
+                            data={{
+                                labels: categoryInfo.labels || [],
+                                datasets: [
+                                    {
+                                        data: categoryInfo.data || [],
+                                        label: "Jumlah Tim",
+                                        backgroundColor: borderColor,
+                                    },
+                                ],
+                            }}
+                            options={{
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        labels: {
+                                            color: "#333333",
+                                            font: {
+                                                family: "'Poppins', sans-serif"
+                                            }
+                                        }
+                                    }
+                                }
+                            }}
+                        />
                     </div>
                 </div>
+
+                {/* Progress Section */}
+                <div className="bg-white dark:bg-gray-800 shadow-lg dark:shadow-none rounded-lg p-6">
+                    <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Progress Proposal</h3>
+                    <div className="space-y-4">
+                        {[{
+                            label: "Pending",
+                            value: dashboardData?.proposalsPending || 0,
+                            total: dashboardData?.totalProposal || 1,
+                            color: "bg-yellow-500",
+                        }, {
+                            label: "Diverifikasi",
+                            value: dashboardData?.proposalsVerified || 0,
+                            total: dashboardData?.totalProposal || 1,
+                            color: "bg-green-500",
+                        }].map((progress, idx) => (
+                            <div key={idx}>
+                                <p className="text-sm font-medium mb-1">{progress.label}</p>
+                                <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                                    <div
+                                        className={`h-2.5 rounded-full ${progress.color}`}
+                                        style={{
+                                            width: `${Math.min((progress.value / progress.total) * 100, 100)}%`,
+                                            maxWidth: "100%",
+                                        }}
+                                    ></div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
             </div>
-        </>
-    )
+
+            {/* Recent Teams Section */}
+            <div className="bg-white dark:bg-gray-800 shadow-lg dark:shadow-none rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Tim Terbaru</h3>
+                <table className="w-full text-left text-gray-700 dark:text-gray-300">
+                    <thead>
+                        <tr>
+                            <th className="py-2 px-4">Nama Tim</th>
+                            <th className="py-2 px-4">Institusi</th>
+                            <th className="py-2 px-4">Tanggal Terdaftar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {recentTeams.map((team: any, index: number) => (
+                            <tr key={index} className="border-t border-gray-200 dark:border-gray-700">
+                                <td className="py-2 px-4">{team.name}</td>
+                                <td className="py-2 px-4">{team.institution}</td>
+                                <td className="py-2 px-4">{new Date(team.createdAt).toLocaleDateString()}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
 }

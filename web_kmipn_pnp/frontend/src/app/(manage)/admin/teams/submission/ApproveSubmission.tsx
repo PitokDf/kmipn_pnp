@@ -1,8 +1,7 @@
 import ModalCustom from "@/components/modal/Modal";
 import { api } from "@/lib/api";
-import { handleInputChange } from "@/lib/others_required";
-import { Proposal, submission } from "@/lib/types";
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { submission } from "@/lib/types";
+import { faClipboardCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { toast } from "react-toastify";
@@ -38,7 +37,7 @@ export default function ApproveSubmision({ data }: { data: submission }) {
     return (
         <>
             <button onClick={handleModal} disabled={data.status !== "pending" ? true : false} className="btn btn-sm btn-solid-success">
-                <FontAwesomeIcon icon={faCheckCircle} />
+                <FontAwesomeIcon icon={faClipboardCheck} />
             </button>
             <ModalCustom
                 isOpen={isOpen}

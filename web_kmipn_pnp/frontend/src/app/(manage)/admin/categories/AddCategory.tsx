@@ -12,7 +12,7 @@ export default function AddCategory() {
     const modalCheckBox = useRef(null);
     const [form, setForm] = useState<{ categoriName: string, description: string, deadline: string }>({ categoriName: "", description: "", deadline: "" });
     const [isLoading, setIsLoading] = useState(false);
-    const [errors, setErrors] = useState({ categoriName: null })
+    const [errors, setErrors] = useState({ categoriName: null, deadline: null })
 
     const handleCloseModal = () => {
         if (modalCheckBox.current) {
@@ -23,7 +23,7 @@ export default function AddCategory() {
 
     const clear = () => {
         setForm({ categoriName: "", description: "", deadline: "" });
-        setErrors({ categoriName: null })
+        setErrors({ categoriName: null, deadline: null })
     }
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -96,19 +96,18 @@ export default function AddCategory() {
                             )}
                         </div>
                         <div className="form-field">
-                            <label htmlFor="" className="form-label">Nama Kategori</label>
+                            <label htmlFor="" className="form-label">Deadline</label>
                             <input
                                 type="date"
-                                className={`input max-w-full ${errors.categoriName && "input-error"}`}
+                                className={`input max-w-full ${errors.deadline && "input-error"}`}
                                 required
-                                placeholder="IOT"
                                 name="deadline"
                                 value={form.deadline}
                                 onChange={(e) => handleInputChange(e)}
                             />
-                            {errors.categoriName && (
+                            {errors.deadline && (
                                 <label className="form-label">
-                                    <span className="form-label-alt text-error">{errors.categoriName}</span>
+                                    <span className="form-label-alt text-error">{errors.deadline}</span>
                                 </label>
                             )}
                         </div>

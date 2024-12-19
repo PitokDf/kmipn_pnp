@@ -28,7 +28,7 @@ export default function RootLayout({
     <html lang="en">
       <link rel="icon" href="https://media.licdn.com/dms/image/v2/D4D03AQG7TgglFclaIw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1730623577381?e=2147483647&v=beta&t=nc8TX7BlSQqDHoqMiREDbToogJ5UM0ANH_XkogtBEoY" type="image/x-icon" />
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen `}
       >
         <DefaultLayout>
           {children}

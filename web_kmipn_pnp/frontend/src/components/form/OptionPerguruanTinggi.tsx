@@ -4,13 +4,12 @@ import { InputProps } from "@/lib/types";
 import React from "react";
 
 export default function OptionListPerguruanTinggi({ className, value, onChange, name, id }: InputProps) {
-  // Transform `list_pt` ke format yang sesuai dengan React-Select
   const options = list_pt.map((pt) => ({ value: pt, label: pt }));
 
   return (
     <Select
-      options={options} // Daftar pilihan
-      value={options.find((option) => option.value === value)} // Pilihan yang aktif
+      options={options}
+      value={options.find((option) => option.value === value)}
       onChange={(selectedOption) => {
         const event = {
           target: {

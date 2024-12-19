@@ -11,9 +11,21 @@ export default function RegisterForm() {
     const [errors, setErrors] = useState({ email: null, name: null, password: null });
     const [otherError, setOtherError] = useState<string | null>();
     const [successMsg, setSuccessMsg] = useState();
+    const [passwordStrength, setPasswordStrength] = useState<string>("");
 
     const handleInputChang = (e: React.ChangeEvent<HTMLInputElement>) => {
         handleInputChange(e, form, setForm);
+    }
+
+    const checkPasswordStrength = (password: string) => {
+        const hasLowerCase = /[a-z]/.test(password);
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasNumber = /\d/.test(password);
+        const hasSysmbol = /[!@#$%^&*(),.?:{}<>]/.test(password);
+
+        if (form.password.length >= 8 && hasLowerCase && hasUpperCase && hasNumber) return "strong";
+        if (form.password.length >= 6 && ((hasLowerCase && hasUpperCase) || (hasNumber && hasLowerCase) || (hasLowerCase && hasSysmbol))) return "medium";
+        return "weak";
     }
 
     const clear = () => {
@@ -102,7 +114,7 @@ export default function RegisterForm() {
                             type="password"
                             value={form.password}
                             className={`input max-w-full ${errors.password && "input-error"}`}
-                            onChange={(e) => handleInputChang(e)}
+                            onChange={(e) => { handleInputChang(e); setPasswordStrength(checkPasswordStrength(e.target.value)) }}
                             name="password" />
                     </div>
                     {errors.password && (
@@ -110,10 +122,19 @@ export default function RegisterForm() {
                             <span className="form-label-alt text-error">{errors.password}.</span>
                         </label>
                     )}
+                    <progress
+                        className={`progress ${passwordStrength === "weak" ? "progress-error" : (passwordStrength === "medium" ? "progress-warning" : "progress-success")} progress-sm w-full`}
+                        value={passwordStrength === "weak" ? "1" : (passwordStrength === "medium" ? "2" : (passwordStrength === "" ? "0" : "3"))} max="3"></progress>
+                    <p className="text-sm">{passwordStrength}</p>
                 </div>
                 <div className="form-field pt-5">
                     <div className="form-control justify-between">
-                        <button type="submit" disabled={isLoading} className={`btn btn-primary w-full ${isLoading && "btn-loading"}`}>{isLoading ? "Loading..." : "Register"}</button>
+                        {
+                            passwordStrength !== "strong" ?
+                                <div className={`btn btn-secondary w-full`}>Register</div>
+                                :
+                                <button type="submit" disabled={isLoading} className={`btn btn-primary w-full ${isLoading && "btn-loading"}`}>{isLoading ? "Loading..." : "Register"}</button>
+                        }
                     </div>
                 </div>
             </div>
