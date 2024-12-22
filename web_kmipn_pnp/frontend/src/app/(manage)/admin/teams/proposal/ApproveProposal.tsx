@@ -62,12 +62,12 @@ export default function ApproveProposal({ data }: { data: Proposal }) {
                                 </div>
                                 <div className="form-field">
                                     <label htmlFor="comments">Catatan</label>
-                                    <input
-                                        type="text"
+                                    <textarea
                                         name="comments"
                                         placeholder="Catatan"
-                                        className="select max-w-full"
+                                        className="textarea max-w-full"
                                         value={form.comments}
+                                        rows={10}
                                         onChange={e => handleInputChange(e)} />
                                 </div>
                             </div>

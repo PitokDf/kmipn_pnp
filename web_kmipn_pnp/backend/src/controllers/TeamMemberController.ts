@@ -9,7 +9,8 @@ import { readHtmlFile } from "../utils/readHtmlFile";
 import { replacePlaceholders } from "../utils/replacePlaceholder";
 import { sendEmail } from "../utils/NodeMailer";
 import { db } from "../config/database";
-import { $Enums, Lecture, Team, TeamMember } from "@prisma/client";
+import fs from "fs";
+import { $Enums } from "@prisma/client";
 
 type clientInput = {
     nama_anggota: string,
@@ -62,6 +63,30 @@ export const storeTeamMember = async (req: Request, res: Response<ResponseApi>) 
 export const saveTeamMember = async (req: Request, res: Response) => {
     try {
         const body = req.body;
+
+        if (!body.nama_dosen || !body.nip_dosen || !body.nama_tim || !body.kategori_lomba || !body.asal_politeknik) {
+
+            const files = req.files as Record<string, Express.Multer.File[]>;
+            for (const key in files) {
+                files[key].forEach((file: Express.Multer.File) => {
+                    const filePath = path.join(__dirname, '../../', file.path);
+                    fs.unlink(filePath, (err) => {
+                        if (err) {
+                            console.error("Error while deleting file:", err);
+                        } else {
+                            console.log(`File ${file.filename} deleted successfully`);
+                        }
+                    });
+                });
+            }
+
+            return res.status(400).json({
+                success: false,
+                statusCode: 400,
+                msg: "Isi semua bidang yang yang dibutuhkan!"
+            })
+        }
+
         const dataLecture = {
             name: body.nama_dosen,
             nip: body.nip_dosen
@@ -75,14 +100,12 @@ export const saveTeamMember = async (req: Request, res: Response) => {
         const files = req.files as Record<string, Express.Multer.File[]>;
 
         const user = await userLogin(req);
-        console.log(user);
 
         const clientInputMembers: clientInput[] = body.members;
         const dataMembers: members[] = clientInputMembers.map((member, index: number) => {
             const fieldName = `ktm_agg${index + 1}`;
             const file = files[fieldName]?.[0];
             return {
-
                 teamId: 0,
                 userId: index === 0 ? user.id : null,
                 no_WA: member.no_wa,

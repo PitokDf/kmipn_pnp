@@ -5,6 +5,7 @@ import { fetcher } from "@/lib/api";
 import { teamMemberType } from "@/lib/types";
 import useSWR from "swr";
 import DetailTeam from "./DetailTeam";
+import DeleteTeam from "./DeleteTeams";
 
 export default function DataTeams() {
     const { data: data, error } = useSWR("/api/v1/all-team-member", fetcher);
@@ -43,8 +44,9 @@ export default function DataTeams() {
                         className: "flex justify-center gap-3",
                         render: (row) => {
                             return (
-                                <div>
-                                    {<DetailTeam teamMember={row} />}
+                                <div className="flex gap-3">
+                                    <DetailTeam teamMember={row} />
+                                    <DeleteTeam data={row} />
                                 </div>
                             )
                         }

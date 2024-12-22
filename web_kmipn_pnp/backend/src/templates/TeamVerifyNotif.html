@@ -6,94 +6,132 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Team Verified</title>
     <style>
-        @media screen {
-            @font-face {
-                font-family: 'Source Sans Pro';
-                font-style: normal;
-                font-weight: 400;
-                src: local('Source Sans Pro Regular'), local('SourceSansPro-Regular'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/ODelI1aHBYDBqgeIAH2zlBM0YzuT7MdOe03otPbuUS0.woff) format('woff');
-            }
+        @font-face {
+            font-family: 'Source Sans Pro';
+            font-style: normal;
+            font-weight: 400;
+            src: local('Source Sans Pro Regular'), local('SourceSansPro-Regular'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/ODelI1aHBYDBqgeIAH2zlBM0YzuT7MdOe03otPbuUS0.woff) format('woff');
+        }
 
-            @font-face {
-                font-family: 'Source Sans Pro';
-                font-style: normal;
-                font-weight: 700;
-                src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/toadOcfmlt9b38dHJxOBGFkQc6VGVFSmCnC_l7QZG60.woff) format('woff');
-            }
+        @font-face {
+            font-family: 'Source Sans Pro';
+            font-style: normal;
+            font-weight: 700;
+            src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/toadOcfmlt9b38dHJxOBGFkQc6VGVFSmCnC_l7QZG60.woff) format('woff');
         }
 
         body {
-            font-family: 'Source Sans Pro';
-            -ms-text-size-adjust: 100%;
-            /* 1 */
-            -webkit-text-size-adjust: 100%;
-            min-height: 100vh;
+            font-family: 'Source Sans Pro', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f5f7;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0;
-        }
-
-        a[x-apple-data-detectors] {
-            font-family: inherit !important;
-            font-size: inherit !important;
-            font-weight: inherit !important;
-            line-height: inherit !important;
-            color: inherit !important;
-            text-decoration: none !important;
+            min-height: 100vh;
         }
 
         .card {
-            max-width: 500px;
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 600px;
             border-radius: 12px;
-            display: grid;
-            place-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: left;
+            padding: 32px;
+            box-sizing: border-box;
         }
 
-        .card .img-verify {
+        .card img {
             width: 100px;
-            margin-bottom: 12px;
+            margin-bottom: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .wrapper {
-            border-radius: 6px;
-            border-top: 4px solid black;
-            box-shadow: 0 4px 12px rgba(128, 128, 128, 0.486);
-            padding: 24px;
+        .card h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .card p {
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.6;
+            margin: 12px 0;
+        }
+
+        .card p strong {
+            color: #333;
         }
 
         .btn-to-dashboard {
+            display: inline-block;
+            margin-top: 24px;
             padding: 12px 24px;
-            background-color: rgb(58, 58, 248);
-            border-radius: 10px;
+            background-color: #4A90E2;
             color: white;
-            font-weight: bold;
             text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-to-dashboard:hover {
+            background-color: #357ABD;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #888888;
+            text-align: left;
+        }
+
+        .footer span {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 24px;
+            }
+
+            .card h3 {
+                font-size: 1.5rem;
+            }
+
+            .btn-to-dashboard {
+                padding: 10px 20px;
+                font-size: 0.95rem;
+            }
         }
     </style>
 </head>
 
 <body>
     <div class="card">
-        <img class="img-verify"
-            src="https://img.freepik.com/free-vector/shield-check-mark-connected-outline_78370-1832.jpg"
-            alt="logo verify">
-        <div class="wrapper">
-            <h3>Halo, {{ nama_ketua }}!</h3>
-            <p>Selamat tim <strong>{{ nama_team }}!</strong> Tim kalian telah diverifikasi oleh Admin KMIPN. Sekarang,
-                kalian sudah bisa
-                lanjut ke tahap
-                berikutnya, yaitu upload proposal. Silahkan masuk ke dashboard kalian dan upload proposal seasui format
-                dan panduan yang sudah ditentukan.</p>
-            <div style="margin: 10px; height:50px; display: flex; justify-content: center; align-items: center;">
-                <a href="{{ link_to_dashboard }}" class="btn-to-dashboard">To Dashboard</a>
-            </div>
-            <p>Kalau ada kendala saat upload atau pertanyaan lainnya, jangan ragu buat hubungi tim admin.</p>
-            <p>Semangat dan sukses terus di KMIPN!</p>
-            <div style="display: flex; flex-direction: column; gap: 6px;">
-                <span>Salam,</span>
-                <strong>Tim Admin KMIPN</strong>
-            </div>
+        <img src="https://img.freepik.com/free-vector/shield-check-mark-connected-outline_78370-1832.jpg"
+            alt="Verification Logo">
+        <h3>Halo, {{ nama_ketua }}!</h3>
+        <p>Selamat tim <strong>{{ nama_team }}</strong>!, Tim kalian telah diverifikasi oleh Admin KMIPN. Sekarang,
+            kalian sudah bisa lanjut ke tahap berikutnya, yaitu upload proposal. Silahkan masuk ke dashboard kalian dan
+            upload proposal sesuai format dan panduan yang sudah ditentukan.</p>
+
+        <a href="{{ link_to_dashboard }}" class="btn-to-dashboard">To Dashboard</a>
+
+        <p>Kalau ada kendala saat upload atau pertanyaan lainnya, jangan ragu untuk hubungi tim admin.</p>
+        <p>Semangat dan sukses terus di KMIPN!</p>
+
+        <div class="footer">
+            <span>Salam,</span>
+            <strong>Tim Admin KMIPN</strong>
         </div>
     </div>
 </body>

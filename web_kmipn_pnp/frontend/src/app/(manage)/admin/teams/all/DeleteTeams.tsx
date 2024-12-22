@@ -2,14 +2,14 @@
 
 import ModalCustom from "@/components/modal/Modal";
 import { api } from "@/lib/api";
-import { User } from "@/lib/types";
+import { teamMemberType, User } from "@/lib/types";
 import { faExclamationTriangle, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { mutate } from "swr";
 
-export default function DeleteUser({ data }: { data: User }) {
+export default function DeleteTeam({ data }: { data: teamMemberType }) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -17,10 +17,10 @@ export default function DeleteUser({ data }: { data: User }) {
     const handleDelete = async () => {
         try {
             setIsLoading(true)
-            const response = await api.delete(`/api/v1/users/${data.id}`);
+            const response = await api.delete(`/api/v1/team/${data.id}`);
             if (response.status === 200) {
                 setIsOpen(false);
-                mutate("/api/v1/users")
+                mutate("/api/v1/all-team-member")
                 toast.success(response.data.msg)
             }
         } catch (error: any) {

@@ -94,8 +94,8 @@ export default function CompleteTeamForm() {
                     window.location.href = "/participant";
                 }, 1500);
             }
-        } catch (error) {
-            toast.success("Terdapat masalah yang tidak diketahui, silahkan coba lagi nanti.");
+        } catch (error: any) {
+            toast.error(error.response.data.msg || "Terdapat masalah yang tidak diketahui, silahkan coba lagi nanti.");
             console.log(error);
         } finally { setIsLoading(false) }
     }

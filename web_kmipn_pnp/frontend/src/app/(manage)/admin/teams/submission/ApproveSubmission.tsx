@@ -10,7 +10,7 @@ import { mutate } from "swr";
 export default function ApproveSubmision({ data }: { data: submission }) {
     const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [form, setform] = useState({ status: "approve", comments: "" })
+    const [form, setform] = useState({ status: "passed", round: "preliminary" })
     const handleModal = () => setIsOpen(!isOpen);
     const handleInputChange = (e: ChangeEvent<any>) => {
         setform({
@@ -36,7 +36,7 @@ export default function ApproveSubmision({ data }: { data: submission }) {
     }
     return (
         <>
-            <button onClick={handleModal} disabled={data.status !== "pending" ? true : false} className="btn btn-sm btn-solid-success">
+            <button onClick={handleModal} className="btn btn-sm btn-solid-success">
                 <FontAwesomeIcon icon={faClipboardCheck} />
             </button>
             <ModalCustom
@@ -63,10 +63,10 @@ export default function ApproveSubmision({ data }: { data: submission }) {
                                 <div className="form-field">
                                     <label htmlFor="comments">Ronde</label>
                                     <select
-                                        name="status"
-                                        id="status"
+                                        name="round"
+                                        id="round"
                                         className="select max-w-full"
-                                        value={form.status}
+                                        value={form.round}
                                         onChange={e => handleInputChange(e)}
                                     >
                                         <option value="preliminary">Penyisihan</option>

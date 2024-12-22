@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Pusher from "pusher-js";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 
 export default function InformasiTeam() {
     const { data, error } = useSWR("/api/v1/team-member", fetcher);
@@ -24,6 +24,7 @@ export default function InformasiTeam() {
         const channel = pusher.subscribe(`team-${data.data.teamID}`);
 
         channel.bind("proposal-status", (data: any) => {
+            mutate("/api/v1/team-member")
             toast.info(data.message, {
                 style: { accentColor: "ButtonShadow" },
                 autoClose: false

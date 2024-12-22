@@ -4,6 +4,7 @@ import { api } from "@/lib/api";
 import { handleInputChange } from "@/lib/others_required";
 import { FormEvent, useState } from "react";
 import { AlertErrorSimple } from "../alert/AlertErrorSimple";
+import InputPassword from "../InputPassword";
 
 export default function RegisterForm() {
     const [form, setForm] = useState({ email: "", name: "", password: "" });
@@ -23,7 +24,7 @@ export default function RegisterForm() {
         const hasNumber = /\d/.test(password);
         const hasSysmbol = /[!@#$%^&*(),.?:{}<>]/.test(password);
 
-        if (form.password.length >= 8 && hasLowerCase && hasUpperCase && hasNumber) return "strong";
+        if (form.password.length >= 7 && hasLowerCase && hasUpperCase && hasNumber) return "strong";
         if (form.password.length >= 6 && ((hasLowerCase && hasUpperCase) || (hasNumber && hasLowerCase) || (hasLowerCase && hasSysmbol))) return "medium";
         return "weak";
     }
@@ -108,15 +109,11 @@ export default function RegisterForm() {
                     <label className="form-label">
                         <span>Password</span>
                     </label>
-                    <div className="form-control">
-                        <input
-                            placeholder="*******"
-                            type="password"
-                            value={form.password}
-                            className={`input max-w-full ${errors.password && "input-error"}`}
-                            onChange={(e) => { handleInputChang(e); setPasswordStrength(checkPasswordStrength(e.target.value)) }}
-                            name="password" />
-                    </div>
+                    <InputPassword
+                        value={form.password}
+                        className={`${errors.password && "input-error"}`}
+                        onChange={(e) => { handleInputChang(e); setPasswordStrength(checkPasswordStrength(e.target.value)) }}
+                    />
                     {errors.password && (
                         <label className="form-label">
                             <span className="form-label-alt text-error">{errors.password}.</span>

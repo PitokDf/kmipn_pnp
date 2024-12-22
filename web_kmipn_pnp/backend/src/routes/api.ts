@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { addUser, AllUser, CheckUserTeam, DeleteUser, GetUserById, updateUser } from "../controllers/Usercontroller";
-import { login, logout, register, verifyEmail } from "../controllers/AuthController";
+import { checkTokenReset, forgotPassword, login, logout, register, resetPassword, verifyEmail } from "../controllers/AuthController";
 import { authenticateJWT } from "../middlewares/tokenAuth";
 import { createCategory, deleteCategory, getAllCategory, getAllCategoryClose, updateCategory } from "../controllers/CategoryController";
 import { loginValidator } from "../validators/LoginValidator";
-import { createTeam, getDataTeam } from "../controllers/TeamController";
+import { createTeam, deleteTeamController, getDataTeam } from "../controllers/TeamController";
 import { createLecture } from "../controllers/LectureController";
 import { createProposal, deleteProposal, downloadAllProposal, getAllproposal, updateProposal } from "../controllers/ProposalController";
 import { getTeamMemberByUserID, saveTeamMember, verifyTeam } from "../controllers/TeamMemberController";
@@ -13,8 +13,9 @@ import { addUserValidator, updateUserValidator } from "../validators/userValidat
 import { updateCategoriValidator } from "../validators/CategoriValidator";
 import { uploadFile } from "../middlewares/mutlerUploadFile";
 import { RegisterValidator } from "../validators/RegisterValidator";
-import { getAllSubmissions } from "../controllers/SubmissionController";
+import { getAllSubmissions, updateStatusRondeController } from "../controllers/SubmissionController";
 import { getInfoDashboardAdmin } from "../controllers/DashboardController";
+import { resetPasswords, ResetPasswordValidator } from "../validators/ResetPasswordValidator";
 
 const router = Router();
 
@@ -41,10 +42,13 @@ router.delete('/users/:id', authenticateJWT, DeleteUser);
 router.post('/register', RegisterValidator, register);
 router.post('/login', loginValidator(), login);
 router.post('/verify-email', verifyEmail);
+router.post("/forgot-password", ResetPasswordValidator, forgotPassword);
+router.post("/reset-password", resetPasswords, resetPassword);
+router.get("/reset-password/:token", ResetPasswordValidator, checkTokenReset);
 router.post('/logout', logout);
 
 router.get("/submissions", authenticateJWT, getAllSubmissions);
-router.put("/submissions", authenticateJWT)
+router.put("/submissions/:id", authenticateJWT, updateStatusRondeController)
 
 router.post("/lecture", authenticateJWT, createLecture);
 router.post("/team", authenticateJWT, createTeam);
@@ -67,6 +71,7 @@ router.post(
 
 
 router.get("/all-team-member", authenticateJWT, getDataTeam);
+router.delete("/team/:id", authenticateJWT, deleteTeamController);
 router.get("/team-member", authenticateJWT, getTeamMemberByUserID);
 router.put("/team-member/:teamID", authenticateJWT, verifyTeam);
 router.get("/check-team-compleate", authenticateJWT, CheckUserTeam);

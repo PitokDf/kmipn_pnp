@@ -88,3 +88,63 @@ export const loginService = async (email: string, password: string) => {
     if (!user || !(await comparePassword(password, user.password))) throw new AppError("Invalid credential", 400);
     return user;
 }
+
+export const forgotPasswordService = async (email: string) => {
+    const checkEmail = await db.user.findFirst({ where: { email } })
+    if (!checkEmail) throw new AppError("Email tidak terdaftar", 400);
+
+    const token = await db.userToken.findFirst({
+        where: { user: { email: email } }
+    });
+
+    if (token?.expiresAt! > new Date()) {
+        throw new AppError("Anda sudah meminta link reset password, tunggu 1 jam untuk mecoba lagi.", 400)
+    }
+
+    if (token && (token.expiresAt < new Date())) {
+        await db.userToken.delete({ where: { id: token.id } });
+    }
+
+
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const tokenExpiryDate = new Date(Date.now() + 3600 * 1000);
+    const newToken = await db.userToken.create({
+        data: {
+            expiresAt: tokenExpiryDate,
+            token: resetToken,
+            userId: checkEmail.id
+        }
+    });
+
+    const resetLink = `${process.env.FRONTEND_URL}/auth/reset-password/${resetToken}`;
+    const filePath = path.join(__dirname, '../templates/EmailResetPassword.html')
+    let emailContent = await readHtmlFile(filePath);
+    const placeholders = {
+        "{{resetLink}}": resetLink
+    };
+    emailContent = replacePlaceholders(emailContent, placeholders);
+
+    const sendEmailSuccess = await sendEmail(checkEmail.email, "Reset Password", emailContent);
+
+    if (!sendEmailSuccess) {
+        await db.userToken.delete({ where: { id: newToken.id } })
+        throw new AppError("Periksa koneksi internetmu!", 400);
+    }
+    return newToken;
+}
+
+export const checkTokenResetService = async (token: string) => {
+    const usertToken = await findToken(token);
+    // melakukan pengecekan apakah tokan valid
+    if (!usertToken) throw new AppError("Invalid or expired token", 400);
+    // melakukan pengecekan apakah token sudah expire atau belum
+    if (usertToken.expiresAt < new Date()) throw new AppError("Token expired", 400);
+    // hapus token dari table user token setelah proses berhasil
+    await db.userToken.delete({ where: { id: usertToken.id } });
+    return usertToken.userId;
+}
+
+export const resetPasswordService = async (password: string, userId: string) => {
+    const userUpdated = await db.user.update({ data: { password }, where: { id: userId } });
+    return userUpdated;
+}

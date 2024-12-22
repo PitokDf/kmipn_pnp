@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { ResponseApi } from "../types/ApiType";
 import { AppError } from "../utils/AppError";
 import { createTeamService, getDataTeamService } from "../services/TeamService";
-import { statusSubmission } from "@prisma/client";
+import { db } from "../config/database";
 
 export const createTeam = async (req: Request, res: Response<ResponseApi>) => {
     try {
@@ -42,5 +42,32 @@ export const getDataTeam = async (req: Request, res: Response<ResponseApi>) => {
             statusCode: 500,
             msg: "Internal server error: " + error
         });
+    }
+}
+
+export const deleteTeamController = async (req: Request, res: Response<ResponseApi>) => {
+    try {
+        const { id } = req.params;
+
+        const team = await db.team.findFirst({
+            where: { id: Number(id) }
+        })
+
+        if (!team) return res.status(404).json({
+            success: false,
+            statusCode: 404,
+            msg: "team tidak ditemukan"
+        })
+
+        const deleteTeam = await db.team.delete({ where: { id: team.id } })
+        return res.status(200).json({ success: true, statusCode: 200, msg: `Berhasil mengapus team ${team.name}`, data: deleteTeam })
+    } catch (error: any) {
+        return res.status(500).json({
+            success: false,
+            statusCode: 500,
+            msg: "Internal server error.",
+            data: null,
+            errors: error.message
+        })
     }
 }

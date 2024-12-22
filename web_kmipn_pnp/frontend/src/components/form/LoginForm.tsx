@@ -4,6 +4,8 @@ import { signIn, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { AlertErrorSimple } from "../alert/AlertErrorSimple";
 import { useSearchParams } from "next/navigation";
+import InputPassword from "../InputPassword";
+import Link from "next/link";
 
 export default function LoginForm() {
     const searchParams = useSearchParams();
@@ -63,16 +65,10 @@ export default function LoginForm() {
                     <label className="form-label">
                         <span>Password</span>
                     </label>
-                    <div className="form-control">
-                        <input
-                            required
-                            name="password"
-                            value={forms.password}
-                            placeholder="********"
-                            type="password"
-                            onChange={(e) => handleInputChange(e)}
-                            className="input max-w-full" />
-                    </div>
+                    <InputPassword
+                        value={forms.password}
+                        onChange={e => handleInputChange(e)}
+                    />
                 </div>
                 <div className="form-field">
                     <div className="form-control justify-between">
@@ -81,7 +77,7 @@ export default function LoginForm() {
                             <a href="#">Remember me</a>
                         </div>
                         <label className="form-label">
-                            <a className="link link-underline-hover link-primary text-sm">Forgot your password?</a>
+                            <Link href={"/auth/forgot-password"} className="link link-underline-hover link-primary text-sm">Forgot your password?</Link>
                         </label>
                     </div>
                 </div>

@@ -9,7 +9,7 @@ export default function ParticipantDashboard() {
 
     return (
         <div>
-            <h1 className="text-4xl mb-6 font-bold">Wellcome!</h1>
+            <h1 className="text-4xl mb-6 font-bold">Welcome!</h1>
             <div className="grid grid-cols-1 gap-6">
                 <InformasiTeam />
             </div>
