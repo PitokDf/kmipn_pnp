@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { addUser, AllUser, CheckUserTeam, DeleteUser, GetUserById, updateUser } from "../controllers/Usercontroller";
-import { checkTokenReset, forgotPassword, login, logout, register, resetPassword, verifyEmail } from "../controllers/AuthController";
+import { checkTokenReset, forgotPassword, login, logout, register, resendEmailVerifikasi, resetPassword, verifyEmail } from "../controllers/AuthController";
 import { authenticateJWT } from "../middlewares/tokenAuth";
 import { createCategory, deleteCategory, getAllCategory, getAllCategoryClose, updateCategory } from "../controllers/CategoryController";
 import { loginValidator } from "../validators/LoginValidator";
@@ -43,6 +43,7 @@ router.post('/register', RegisterValidator, register);
 router.post('/login', loginValidator(), login);
 router.post('/verify-email', verifyEmail);
 router.post("/forgot-password", ResetPasswordValidator, forgotPassword);
+router.post("/resend-verifikasi", ResetPasswordValidator, resendEmailVerifikasi);
 router.post("/reset-password", resetPasswords, resetPassword);
 router.get("/reset-password/:token", ResetPasswordValidator, checkTokenReset);
 router.post('/logout', logout);
@@ -76,7 +77,7 @@ router.get("/team-member", authenticateJWT, getTeamMemberByUserID);
 router.put("/team-member/:teamID", authenticateJWT, verifyTeam);
 router.get("/check-team-compleate", authenticateJWT, CheckUserTeam);
 
-router.get("/admin/dashboard", getInfoDashboardAdmin)
+router.get("/admin/dashboard", getInfoDashboardAdmin);
 router.get('/categories', getAllCategory);
 router.post('/categories', authenticateJWT, updateCategoriValidator, createCategory);
 router.get('/categories-close', authenticateJWT, getAllCategoryClose);

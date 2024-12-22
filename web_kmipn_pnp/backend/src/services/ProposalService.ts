@@ -23,7 +23,7 @@ export const createProposalService =
     }
 
 export const getProposalService = async () => {
-    const proposals = await db.proposal.findMany({ include: { assessment: true, team: true, file: true } })
+    const proposals = await db.proposal.findMany({ include: { assessment: true, team: true, file: true }, orderBy: { createdAt: "desc" } })
     if (!proposals) throw new AppError("Terjadi masalah saat mengambil data.", 400);
     return proposals;
 }

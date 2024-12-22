@@ -35,7 +35,7 @@ export default function DataTeams() {
                     {
                         header: "Status", key: null,
                         render: (row) => (
-                            row.verified ? <div className="badge badge-sm badge-success">Verified</div> :
+                            row.verified === "true" ? <div className="badge badge-sm badge-success">Verified</div> :
                                 <div className="badge badge-sm badge-warning">Unverified</div>
                         )
                     },

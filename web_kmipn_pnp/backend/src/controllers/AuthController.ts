@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { AppError } from "../utils/AppError";
 import { ResponseApi } from "../types/ApiType";
-import { checkTokenResetService, forgotPasswordService, loginService, registerService, resetPasswordService, verifyTokenService } from "../services/AuthService";
+import { checkTokenResetService, forgotPasswordService, loginService, registerService, resendEmailVerifikasiService, resetPasswordService, verifyTokenService } from "../services/AuthService";
 import { decodeJWT, generateToken, refreshTokenJwt, userLogin, verifyToken } from "../config/jwt";
 import jwt from 'jsonwebtoken'
 import { validationResult } from "express-validator";
@@ -145,6 +145,34 @@ export const logout = (req: Request, res: Response<ResponseApi>) => {
     res.clearCookie('accessToken'); // Hapus access token dari cookie
     res.status(200).json({ success: true, statusCode: 200, msg: 'Logged out successfully' });
 };
+
+export const resendEmailVerifikasi = async (req: Request, res: Response<ResponseApi>) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) return res.status(400).json({ success: false, msg: "Validation required", statusCode: 400, errors });
+        const { email } = req.body;
+        const resendEmail = await resendEmailVerifikasiService(email);
+        return res.status(200).json({
+            success: true,
+            statusCode: 200,
+            msg: "Berhasil mengirim email verifikasi."
+        });
+    } catch (error) {
+        if (error instanceof AppError) {
+            return res.status(error.statusCode).json({
+                success: false,
+                statusCode: error.statusCode,
+                msg: error.message
+            })
+        }
+
+        return res.status(500).json({
+            success: false,
+            statusCode: 500,
+            msg: "Internal server error" + error
+        })
+    }
+}
 
 export const forgotPassword = async (req: Request, res: Response<ResponseApi>) => {
     try {

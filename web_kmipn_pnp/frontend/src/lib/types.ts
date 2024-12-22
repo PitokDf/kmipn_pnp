@@ -60,7 +60,7 @@ export interface teamMemberType {
     statusProposal: string,
     statusSubmission: string,
     round: string,
-    verified: boolean,
+    verified: string,
     isPrposalrejected: boolean;
     reasonRejected: string;
     teamMembers?: any

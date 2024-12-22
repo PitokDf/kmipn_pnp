@@ -28,7 +28,8 @@ export const createTeam = async (req: Request, res: Response<ResponseApi>) => {
 export const getDataTeam = async (req: Request, res: Response<ResponseApi>) => {
     try {
         const teamData = await getDataTeamService();
-        return res.status(200).json({ success: true, statusCode: 200, msg: "successfully get team data", data: teamData })
+
+        return res.status(200).json({ success: true, statusCode: 200, msg: "successfully get team data", data: teamData.map((data) => ({ ...data, verified: data.verified ? "true" : 'false' })) })
     } catch (error) {
         if (error instanceof AppError) {
             return res.status(error.statusCode).json({

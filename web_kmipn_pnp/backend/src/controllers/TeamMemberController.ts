@@ -11,6 +11,7 @@ import { sendEmail } from "../utils/NodeMailer";
 import { db } from "../config/database";
 import fs from "fs";
 import { $Enums } from "@prisma/client";
+import { pusher } from "../config/pusher";
 
 type clientInput = {
     nama_anggota: string,
@@ -227,12 +228,14 @@ export const verifyTeam = async (req: Request, res: Response<ResponseApi>) => {
             "{{ link_to_dashboard }}": link_to_dashboard
         })
         const sendEmailSuccess = await sendEmail(leaderTeam[0].email, "Team Verified", emailContent);
-
         // jika email verifikasi gagal terkirim maka lempar error dan hapus user
         if (!sendEmailSuccess) {
             unVerifyTeamService(Number(teamID));
             throw new AppError("Failed send email", 400);
         }
+        await pusher.trigger(`team-${teamID}`, "team-verify", {
+            message: "Tim kamu baru saja di verifikasi oleh admin KMIPN."
+        });
 
         return res.status(200).json({ success: true, statusCode: 200, msg: "Successfully verify team.", data: { verifyTeam, leaderTeam } })
     } catch (error) {

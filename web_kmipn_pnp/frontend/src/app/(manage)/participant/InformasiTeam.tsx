@@ -15,14 +15,13 @@ export default function InformasiTeam() {
 
     // Hook selalu dipanggil
     useEffect(() => {
-        if (!data) return; // Early exit kalau data belum siap
+        if (!data) return;
 
-        const pusher = new Pusher(process.env.PUSHER_KEY || "2d5de132baafe30a0e42", {
-            cluster: process.env.PUSHER_CLUSTER || "eu",
+        const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY || "isi-sendiri", {
+            cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER || "isi-laaaa",
         });
 
         const channel = pusher.subscribe(`team-${data.data.teamID}`);
-
         channel.bind("proposal-status", (data: any) => {
             mutate("/api/v1/team-member")
             toast.info(data.message, {
@@ -31,13 +30,20 @@ export default function InformasiTeam() {
             });
         });
 
+        channel.bind("team-verify", (data: any) => {
+            mutate("/api/v1/team-member")
+            toast.info(data.message, {
+                style: { accentColor: "ButtonShadow" },
+                autoClose: false
+            });
+        })
+
         return () => {
             channel.unbind_all();
             channel.unsubscribe();
         };
     }, [data]);
 
-    // Conditional rendering di dalam JSX
     if (error) {
         return <div>Terjadi masalah saat memuat data.</div>;
     }

@@ -22,7 +22,7 @@ export default function VerfiyEmail() {
                     }, 1500);
                 }
             } catch (error: any) {
-                setMsg(error.response.data.msg)
+                setMsg(error?.response?.data?.msg)
             }
         }
         verfiyEmail();

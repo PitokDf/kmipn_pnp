@@ -1,3 +1,4 @@
+import { useSearchParams } from "next/navigation";
 import React, { HTMLAttributes, useState } from "react";
 
 type Column<T> = {
@@ -74,7 +75,8 @@ export default function TablePagination<T extends Record<string, React.ReactNode
         </>
     )
 
-    const [searchKey, setSearchKey] = useState<string>("");
+    const searchParams = useSearchParams();
+    const [searchKey, setSearchKey] = useState<string>(searchParams.get("query") || "");
     const [itemPerPage, setItemPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
 

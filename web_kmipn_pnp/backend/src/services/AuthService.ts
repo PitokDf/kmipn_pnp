@@ -148,3 +148,18 @@ export const resetPasswordService = async (password: string, userId: string) => 
     const userUpdated = await db.user.update({ data: { password }, where: { id: userId } });
     return userUpdated;
 }
+
+export const resendEmailVerifikasiService = async (email: string) => {
+    const user = await db.user.findFirst({
+        where: { email }
+    });
+    if (user?.verified) throw new AppError("Anda sudah terverifikasi!", 400);
+
+    const userToken = await db.userToken.findFirst({
+        where: { userId: user?.id }
+    });
+
+    if (userToken) throw new AppError("Email verifikasi sudah terkirim!", 400);
+    sendEmailVerfikasi(user!, "")
+    return true
+}

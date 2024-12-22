@@ -5,6 +5,7 @@ import { handleInputChange } from "@/lib/others_required";
 import { FormEvent, useState } from "react";
 import { AlertErrorSimple } from "../alert/AlertErrorSimple";
 import InputPassword from "../InputPassword";
+import Link from "next/link";
 
 export default function RegisterForm() {
     const [form, setForm] = useState({ email: "", name: "", password: "" });
@@ -114,6 +115,9 @@ export default function RegisterForm() {
                         className={`${errors.password && "input-error"}`}
                         onChange={(e) => { handleInputChang(e); setPasswordStrength(checkPasswordStrength(e.target.value)) }}
                     />
+                    <label className="form-label">
+                        <Link href={"/auth/resend-verifikasi"} className="link link-underline-hover link-primary text-sm">Resend email verifikasi?</Link>
+                    </label>
                     {errors.password && (
                         <label className="form-label">
                             <span className="form-label-alt text-error">{errors.password}.</span>
