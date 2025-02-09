@@ -10,7 +10,7 @@ export const loginUser = async (email: string, password: string) => {
 };
 
 export const api = axios.create({
-    baseURL: "http://192.168.45.41:2003",
+    baseURL: process.env.NEXT_PUBLIC_API_URL,
     timeout: 1000000
 })
 

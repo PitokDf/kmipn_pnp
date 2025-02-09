@@ -36,7 +36,7 @@ export default function LoginForm() {
             });
 
             if (!result?.ok) {
-                setError(result?.error!);
+                setError(result?.status === 401 ? "Email or password is wrong" : "");
                 return
             }
             window.location.reload();
