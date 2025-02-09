@@ -1,5 +1,5 @@
 export const metadata = {
-    title: 'Homepage KMIPN VII',
+    title: 'KMIPN VII',
 };
 
 import { KategoriSection, LokasiKami } from "@/components/categori/CategoriSection";
