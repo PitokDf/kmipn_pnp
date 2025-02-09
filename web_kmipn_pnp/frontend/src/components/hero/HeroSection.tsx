@@ -24,12 +24,12 @@ const HeroSection = () => {
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link
+                        <a
                             href="/auth/register"
                             className="px-8 py-3 bg-white text-blue-600 rounded-full font-semibold shadow-lg hover:bg-blue-50 
                             transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-400">
                             Daftar Sekarang
-                        </Link>
+                        </a>
                     </div>
                 </div>
             </div>

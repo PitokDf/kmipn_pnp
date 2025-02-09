@@ -59,7 +59,7 @@ export default function DetailTeam({ teamMember }: { teamMember: teamMemberType 
                             }
                         </div>
                         <div className="flex pt-2 border-t border-t-slate-500 justify-end">
-                            {!teamMember.verified ?
+                            {teamMember.verified === "false" ?
                                 <VerifikasiTeam teamId={teamMember.id!} /> :
                                 <button className="btn btn-sm btn-ghost rounded-md cursor-not-allowed" type="button">Sudah Diverifikasi</button>
                             }

@@ -7,7 +7,7 @@ import { loginValidator } from "../validators/LoginValidator";
 import { createTeam, deleteTeamController, getDataTeam } from "../controllers/TeamController";
 import { createLecture } from "../controllers/LectureController";
 import { createProposal, deleteProposal, downloadAllProposal, getAllproposal, updateProposal } from "../controllers/ProposalController";
-import { getTeamMemberByUserID, saveTeamMember, verifyTeam } from "../controllers/TeamMemberController";
+import { downloadAttendace, getTeamMemberByUserID, saveTeamMember, verifyTeam } from "../controllers/TeamMemberController";
 import { userLogin } from "../config/jwt";
 import { addUserValidator, updateUserValidator } from "../validators/userValidator";
 import { updateCategoriValidator } from "../validators/CategoriValidator";
@@ -73,6 +73,7 @@ router.post(
 
 router.get("/all-team-member", authenticateJWT, getDataTeam);
 router.delete("/team/:id", authenticateJWT, deleteTeamController);
+router.get("/team/attendace", downloadAttendace);
 router.get("/team-member", authenticateJWT, getTeamMemberByUserID);
 router.put("/team-member/:teamID", authenticateJWT, verifyTeam);
 router.get("/check-team-compleate", authenticateJWT, CheckUserTeam);

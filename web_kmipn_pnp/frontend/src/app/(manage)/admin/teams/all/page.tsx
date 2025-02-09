@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import DataTeams from "./DataTeams";
+import DownloadAttendace from "./DownloadAttendace";
 
 export const metadata: Metadata = {
     title: 'Data Team',
@@ -14,7 +15,7 @@ export default function UserPage() {
                 <div className="card-body">
                     <h1 className="text-xl font-semibold mb-3">Manage Teams</h1>
                     <div className="flex justify-end mb-3">
-                        {/* <AddUser /> */}
+                        <DownloadAttendace />
                     </div>
                     <DataTeams />
                 </div>

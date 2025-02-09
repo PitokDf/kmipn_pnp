@@ -12,13 +12,14 @@ const SambutanSection = () => {
 
     return (
         <section ref={containerRef} id="sambutan" className="py-24 bg-gradient-to-b from-gray-50 to-gray-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16">
+            <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+                {/* Heading Section */}
+                <div className="text-center mb-12">
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
-                        className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-wide"
+                        className="text-4xl font-extrabold text-gray-900 tracking-wide"
                     >
                         Sambutan
                     </motion.h2>
@@ -26,49 +27,67 @@ const SambutanSection = () => {
                         initial={{ scale: 0.8, opacity: 0 }}
                         whileInView={{ scale: 1, opacity: 1 }}
                         transition={{ duration: 0.6 }}
-                        className="w-20 h-1 bg-blue-500 mx-auto rounded"
+                        className="w-24 h-1 bg-blue-600 mx-auto rounded-full mt-4"
                     ></motion.div>
                 </div>
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    transition={{ duration: 0.8 }}
-                    className="bg-white shadow-md p-8 rounded-lg border-t-4 border-blue-500 mb-12"
-                >
-                    <p className="text-center text-lg md:text-xl text-gray-700 leading-relaxed">
-                        Selamat datang di <strong>Kompetisi Mahasiswa Bidang Informatika Politeknik Nasional (KMIPN) 2025</strong>. Pagelaran ketujuh ini, Politeknik Negeri Padang (PNP) menjadi tuan rumah dan akan membawa semangat baru untuk membawakan pengalaman berkompetisi yang lebih seru. Menuju Indonesia Emas 2045, pendidikan tinggi vokasi menjadi wadah bagi para mahasiswa untuk mengembangkan inovasi di seluruh bidang ilmu pengetahuan.
-                    </p>
-                </motion.div>
 
-                <motion.div
-                    initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                    className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center"
-                >
-                    <div className="bg-blue-50 p-6 rounded-lg shadow-md">
-                        <p className="text-gray-700 text-lg leading-relaxed">
-                            Tentu saja perguruan tinggi tidak dapat berdiri sendiri dalam mengembangkan inovasi. Perlu adanya kolaborasi dengan industri untuk berkembang bersama-sama. Dengan mengusung tema:
-                        </p>
-                    </div>
-
-                    <motion.strong
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        whileInView={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: 0.6 }}
-                        className="text-center flex justify-center text-xl md:text-2xl font-semibold text-blue-700 bg-blue-100 p-4 rounded-lg shadow"
+                {/* Content Section */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    {/* Image Section */}
+                    <motion.div
+                        initial={{ opacity: 0, x: -50 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="relative"
                     >
-                        "Vokasi Mewujudkan Kampus Prestasi Menuju Inovasi Informatika"
-                    </motion.strong>
-                </motion.div>
+                        <img
+                            src="/images/developer.webp"
+                            alt="Sambutan"
+                            className="rounded-lg shadow-lg"
+                        />
+                        {/* Decorative Element */}
+                        <div className="absolute -top-6 -left-6 w-14 h-14 object-fill bg-blue-100 rounded-full shadow-md"></div>
+                    </motion.div>
 
+                    {/* Text Section */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 50 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="text-gray-700 leading-relaxed space-y-6"
+                    >
+                        <p className="text-lg md:text-xl">
+                            Selamat datang di <strong>Kompetisi Mahasiswa Bidang Informatika Politeknik Nasional (KMIPN) 2025</strong>. Pagelaran ketujuh ini, Politeknik Negeri Padang (PNP) menjadi tuan rumah dan akan membawa semangat baru untuk membawakan pengalaman berkompetisi yang lebih seru.
+                        </p>
+                        <p className="text-lg md:text-xl">
+                            Menuju Indonesia Emas 2045, pendidikan tinggi vokasi menjadi wadah bagi para mahasiswa untuk mengembangkan inovasi di seluruh bidang ilmu pengetahuan.
+                        </p>
+                    </motion.div>
+                </div>
+
+                {/* Highlight Section */}
+                <div className="mt-16 bg-blue-50 p-8 rounded-lg shadow-md">
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        transition={{ duration: 0.8 }}
+                        className="text-center text-lg md:text-xl text-gray-700 leading-relaxed"
+                    >
+                        <strong>Tema: </strong>
+                        <span className="text-blue-600 font-semibold">
+                            "Vokasi Mewujudkan Kampus Prestasi Menuju Inovasi Informatika"
+                        </span>
+                    </motion.p>
+                </div>
+
+                {/* Button Section */}
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.8 }}
                     className="mt-16 flex justify-center"
                 >
-                    <button className="px-6 py-3 bg-blue-500 text-white rounded-md shadow-lg hover:bg-blue-600 transition">
+                    <button className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition">
                         Pelajari Lebih Lanjut
                     </button>
                 </motion.div>

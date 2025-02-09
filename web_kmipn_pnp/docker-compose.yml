@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  backend: 
+    build: ./backend
+    ports:
+      - "2003:2003"
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/mydb?schema=public
+      - NODE_ENV=production
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+  
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:2003
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d mydb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+  
+volumes:
+  postgres-data
+
+networks:
+  app-network:
+    driver: bridge

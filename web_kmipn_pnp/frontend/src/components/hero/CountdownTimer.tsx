@@ -12,7 +12,7 @@ interface TimeLeft {
 
 const CountdownTimer = () => {
   const calculateTimeLeft = (): TimeLeft => {
-    const targetDate = new Date('2024-12-31').getTime();
+    const targetDate = new Date('2025-12-12').getTime();
     const now = new Date().getTime();
     const difference = targetDate - now;
 
@@ -35,10 +35,10 @@ const CountdownTimer = () => {
   }, []);
 
   const timeBlocks = [
-    { label: 'Days', value: timeLeft.days },
-    { label: 'Hours', value: timeLeft.hours },
-    { label: 'Minutes', value: timeLeft.minutes },
-    { label: 'Seconds', value: timeLeft.seconds },
+    { label: 'Days', value: timeLeft.days < 0 ? 0 : timeLeft.days },
+    { label: 'Hours', value: timeLeft.hours < 0 ? 0 : timeLeft.hours },
+    { label: 'Minutes', value: timeLeft.minutes < 0 ? 0 : timeLeft.minutes },
+    { label: 'Seconds', value: timeLeft.seconds < 0 ? 0 : timeLeft.seconds },
   ];
 
   return (

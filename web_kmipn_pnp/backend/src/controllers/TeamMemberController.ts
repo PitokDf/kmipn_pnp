@@ -12,6 +12,8 @@ import { db } from "../config/database";
 import fs from "fs";
 import { $Enums } from "@prisma/client";
 import { pusher } from "../config/pusher";
+import { createObjectCsvWriter } from "csv-writer";
+import { format } from "@fast-csv/format";
 
 type clientInput = {
     nama_anggota: string,
@@ -256,4 +258,86 @@ export const verifyTeam = async (req: Request, res: Response<ResponseApi>) => {
 
 export const completeTeam = async (req: Request, res: Response<ResponseApi>) => {
 
+}
+
+export const generateAttedance = async () => {
+    const attendace = await db.teamMember.findMany({
+        select: {
+            name: true, nim: true, prodi: true, team: { select: { name: true, institution: true } }
+        }
+    });
+
+    const filePath = 'attendace.csv';
+    const csvWritter = createObjectCsvWriter({
+        path: filePath,
+        header: [
+            { id: 'name', title: "Nama" },
+            { id: 'nim', title: "NIM" },
+            { id: 'prodi', title: "Prodi" },
+            { id: 'teamName', title: "Nama Team" },
+            { id: 'institution', title: "Asal Politeknik" }
+        ]
+    });
+
+    const records = attendace.map((member) => ({
+        name: member.name,
+        nim: member.nim,
+        prodi: member.prodi,
+        teamName: member.team.name,
+        institution: member.team.institution
+    }));
+
+    await csvWritter.writeRecords(records);
+}
+
+export const downloadAttendace = async (req: Request, res: Response) => {
+    try {
+        // Ambil data dari database
+        const attendance = await db.teamMember.findMany({
+            select: {
+                name: true,
+                nim: true,
+                prodi: true,
+                team: {
+                    select: {
+                        name: true,
+                        institution: true,
+                    },
+                },
+            },
+            where: {
+                team: {
+                    NOT: { verified: false }
+                }
+            },
+            orderBy: {
+                team: { name: "asc" }
+            }
+        });
+
+        // Set header untuk download file
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', 'attachment; filename="attendance.csv"');
+
+        // Stream CSV ke client
+        const csvStream = format({ headers: true });
+        csvStream.pipe(res);
+
+        // Masukkan data ke stream
+        attendance.forEach((member) => {
+            csvStream.write({
+                Name: member.name,
+                NIM: member.nim,
+                Prodi: member.prodi,
+                'Team Name': member.team.name,
+                Institution: member.team.institution,
+            });
+        });
+
+        // Akhiri stream
+        csvStream.end();
+    } catch (error) {
+        console.error('Error generating CSV:', error);
+        res.status(500).json({ message: 'Error generating CSV' });
+    }
 }
