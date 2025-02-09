@@ -7,8 +7,8 @@ const nextConfig: NextConfig = {
             {
                 hostname: process.env.HOSTNAME!,
                 protocol: "http",
-                pathname: "/**",
-                port: "2003"
+                // pathname: "/**",
+                // port: "2003"
             }
         ]
     }
