@@ -24,6 +24,10 @@ export const metadata: Metadata = {
   },
   keywords: [
     'kmipn',
+    'kmipn pnp',
+    'kmipn 7',
+    'kmipn vii',
+    'kmipn politeknik negeri padang',
     'kompetisi mahasiswa',
     'informatika',
     'politeknik nasional',
