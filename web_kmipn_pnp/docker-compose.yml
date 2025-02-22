@@ -1,51 +1,40 @@
 version: '3.8'
 
 services:
-  backend: 
+  postgres:
+    image: postgres:latest
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 121203
+      POSTGRES_DB: kmipn_db
+    ports:
+      - "6543:6543"
+    volumes:
+      - pgdata:/var/lab/postgresql/data
+  
+  backend:
     build: ./backend
+    container_name: backend-api
+    depends_on:
+      - postgres
     ports:
       - "2003:2003"
     environment:
-      - DATABASE_URL=postgresql://user:password@db:5432/mydb?schema=public
-      - NODE_ENV=production
-    depends_on:
-      db:
-        condition: service_healthy
-    networks:
-      - app-network
-  
+      DATABASE_URL: "postgresql://postgres:121203@postgres:6543/kmipn_db"
+    volumes:
+      - ./backend:/app
+    command: ["npm", "run", "dev"]
+
   frontend:
     build: ./frontend
+    container_name: frontend-app
+    depends_on:
+      - backend
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://backend:2003
-    depends_on:
-      - backend
-    networks:
-      - app-network
-    
-  db:
-    image: postgres:15-alpine
-    environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=mydb
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user -d mydb"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    networks:
-      - app-network
-  
-volumes:
-  postgres-data
+      NEXT_PUBLIC_API_URL: "http://localhost:3001"
 
-networks:
-  app-network:
-    driver: bridge
+volumes:
+  pgdata:
