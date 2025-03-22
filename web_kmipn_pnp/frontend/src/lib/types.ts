@@ -63,7 +63,8 @@ export interface teamMemberType {
     verified: string,
     isPrposalrejected: boolean;
     reasonRejected: string;
-    teamMembers?: any
+    teamMembers?: any;
+    proposalName: string
 }
 export interface teamMember1 {
     id?: number,

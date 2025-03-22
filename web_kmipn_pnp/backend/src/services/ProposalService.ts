@@ -5,14 +5,15 @@ import { constants } from "fs/promises";
 import path from "path";
 import { uploadDir } from "../middlewares/mutlerUploadFile";
 import { $Enums } from "@prisma/client";
+import { deleteFileFromDrive } from "./GoogleDriveServices";
 
 export const createProposalService =
-    async (teamID: number, filelink: string, fileName: string, fileSize: number, type: string, originalName: string, path: string
+    async (teamID: number, fileId: string, filelink: string, fileName: string, fileSize: number, type: string, originalName: string, path: string
     ) => {
         const transaction = await db.$transaction(async () => {
             const file = await db.file.create({
                 data: {
-                    fileName, fileSize, type, originalName, path
+                    id: fileId, fileName, fileSize, type, originalName, path
                 }
             });
             const proposal = await db.proposal.create({ data: { teamId: teamID, fileLink: filelink, fileId: file.id, title: file.originalName.split(".")[0] } });
@@ -35,13 +36,7 @@ export const deleteProposalService = async (id: number) => {
     const filePath = path.join(uploadDir, file?.path!);
     console.log("\nfile path:" + filePath);
 
-    access(filePath, constants.F_OK, (err) => {
-        if (err) throw new AppError("File sudah tidak tersedia", 400);
-
-        unlink(filePath, (err) => {
-            if (err) throw new AppError("Gagal menghapus file.", 500);
-        });
-    });
+    await deleteFileFromDrive(file?.id!)
     await db.proposal.delete({ where: { id: Number(id) } });
     await db.file.delete({ where: { id: proposal.fileId } });
     return proposal;

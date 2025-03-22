@@ -16,6 +16,7 @@ import { RegisterValidator } from "../validators/RegisterValidator";
 import { getAllSubmissions, updateStatusRondeController } from "../controllers/SubmissionController";
 import { getInfoDashboardAdmin } from "../controllers/DashboardController";
 import { resetPasswords, ResetPasswordValidator } from "../validators/ResetPasswordValidator";
+import { uploadDrive } from "../middlewares/multerDrive";
 
 const router = Router();
 
@@ -54,7 +55,7 @@ router.put("/submissions/:id", authenticateJWT, updateStatusRondeController)
 router.post("/lecture", authenticateJWT, createLecture);
 router.post("/team", authenticateJWT, createTeam);
 
-router.post("/upload-proposal", authenticateJWT, uploadFile.single("file_proposal"), createProposal);
+router.post("/upload-proposal", authenticateJWT, uploadDrive.single("file_proposal"), createProposal);
 router.get("/proposals", authenticateJWT, getAllproposal);
 router.delete("/proposals/:id", authenticateJWT, deleteProposal);
 router.put("/proposals/:id", authenticateJWT, updateProposal);

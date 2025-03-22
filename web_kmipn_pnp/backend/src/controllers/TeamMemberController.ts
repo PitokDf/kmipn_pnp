@@ -175,6 +175,7 @@ export const getTeamMemberByUserID = async (req: Request, res: Response<Response
             lectureName: teamMember.team.lecture.name,
             lectureNip: teamMember.team.lecture.nip,
             linkProposal: lastestProposal?.fileLink || null,
+            proposalName: lastestProposal?.title || null,
             statusProposal: lastestProposal?.status || "Pending",
             statusSubmission: submission?.status === "passed" ? (submission.round === "final" ? "done" : submission.round) : submission?.status || "pending",
             round: submission?.status === "passed" ? (submission.round === "preliminary" ? "pending" : submission.round) : submission?.status || "pending",

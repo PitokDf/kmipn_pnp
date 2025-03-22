@@ -9,6 +9,7 @@ import { existsSync, unlink } from "fs";
 import { uploadDir } from "../middlewares/mutlerUploadFile";
 import path from "path";
 import { pusher } from "../config/pusher";
+import { uploadFileToDrive } from "../services/GoogleDriveServices";
 
 export const createProposal = async (req: Request, res: Response<ResponseApi>) => {
     try {
@@ -17,11 +18,12 @@ export const createProposal = async (req: Request, res: Response<ResponseApi>) =
         const category = await findCategory(user.teamMember?.team.categoryID!);
         const deadline = category?.deadline;
 
+        // cek waktu pengumpulan proposal
         if (new Date(deadline!).getTime() < new Date().getTime()) {
             return res.status(403).json({ success: true, statusCode: 403, msg: "Sudah lewat waktu pengumpulan" })
         }
 
-        const allowedMimeType = ["application/pdf"];
+        const allowedMimeType = ["application/pdf"]; // type file yang diizinkan adalah pdf
         const file_proposal = req.file;
 
         if (!allowedMimeType.includes(file_proposal?.mimetype!)) {
@@ -34,12 +36,28 @@ export const createProposal = async (req: Request, res: Response<ResponseApi>) =
                 msg: "Proposal hanya boleh pdf yaa, nggak boleh yang lain."
             })
         }
-        const { type } = req.query;
-        const file = req.file;
-        const filePath = file?.path.split("/").slice(1, 3).join("/");
-        const fileLink = `${process.env.BASEURl}/${type}/${req.file?.filename}`;
+
+        // upload file ke google drive
+        const fileBuffer = file_proposal?.buffer;
+        const fileName = file_proposal?.originalname;
+        const mimeType = file_proposal?.mimetype;
+        const folderId = process.env.GOOGLE_DRIVE_FOLDER_PROPOSAL_ID || '';
+
+        const uploadResult = await uploadFileToDrive(fileBuffer!, fileName!, mimeType!, folderId)
+
+        const fileLink = uploadResult.webViewLink;
         const proposal = await
-            createProposalService(Number(teamID), String(fileLink), file?.filename!, file?.size!, file?.mimetype!, file?.originalname!, filePath!);
+            createProposalService(
+                Number(teamID),
+                uploadResult.id!,
+                String(fileLink),
+                fileName!,
+                file_proposal?.size!,
+                file_proposal?.mimetype!,
+                file_proposal?.originalname!,
+                file_proposal?.path || ""
+            );
+
         return res.status(201).json({ success: true, statusCode: 201, msg: "successfully save proposal", data: proposal })
     } catch (error) {
         if (error instanceof AppError) {

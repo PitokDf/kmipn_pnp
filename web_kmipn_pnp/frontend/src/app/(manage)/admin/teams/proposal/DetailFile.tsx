@@ -21,8 +21,6 @@ export default function DetailFile({ data }: { data: Proposal }) {
                 children={
                     <>
                         <div className="grid grid-cols-[1fr_2fr] gap-3 mb-6">
-                            <span className="text-base font-semibold">File Path</span>
-                            <span className="text-base font-medium max-w-full text-wrap">{file.path}</span>
                             <span className="text-base font-semibold">Ukuran File</span>
                             <span className="text-base font-medium">{Math.round((file.fileSize / 100000) * 10) / 100} MB</span>
                             <span className="text-base font-semibold">File Mimetype</span>

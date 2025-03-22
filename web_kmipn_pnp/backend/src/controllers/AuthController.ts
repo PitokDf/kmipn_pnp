@@ -5,7 +5,6 @@ import { checkTokenResetService, forgotPasswordService, loginService, registerSe
 import { decodeJWT, generateToken, refreshTokenJwt, userLogin, verifyToken } from "../config/jwt";
 import jwt from 'jsonwebtoken'
 import { validationResult } from "express-validator";
-import { db } from "../config/database";
 import { hashPassword } from "../utils/HashPassword";
 
 export const register = async (req: Request, res: Response<ResponseApi>) => {

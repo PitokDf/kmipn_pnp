@@ -31,7 +31,7 @@ export const addCategoriService = async (categoriName: string, description: stri
 
 export const findCategory = async (id: number) => {
     const category = await db.category.findUnique({
-        where: { id }
+        where: { id }, select: { deadline: true }
     });
     return category
 }

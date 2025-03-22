@@ -109,7 +109,7 @@ export default function InformasiTeam() {
                             ) : (
                                 teamData.linkProposal ? (
                                     <a href={teamData.linkProposal} className="font-normal text-blue-600" target="_blank">
-                                        {teamData?.linkProposal.split('/')[4]}
+                                        {teamData?.proposalName}
                                     </a>
                                 ) : (
                                     <UploadProposal />
