@@ -10,13 +10,13 @@ import TimelineSection from "@/components/timeline/TimelineSection";
 
 export default function HomePage() {
     return (
-        <div>
+        <>
             <HeroSection />
             <SambutanSection />
             <TimelineSection />
             <KategoriSection />
             <LokasiKami />
             <Footer />
-        </div>
+        </>
     );
 }

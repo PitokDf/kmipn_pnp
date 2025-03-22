@@ -11,7 +11,7 @@ const SambutanSection = () => {
     });
 
     return (
-        <section ref={containerRef} id="sambutan" className="py-24 bg-gradient-to-b from-gray-50 to-gray-100">
+        <section ref={containerRef} id="sambutan" className="py-24 bg-gradient-to-b from-gray-50 to-gray-100 overflow-x-hidden">
             <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
                 {/* Heading Section */}
                 <div className="text-center mb-12">

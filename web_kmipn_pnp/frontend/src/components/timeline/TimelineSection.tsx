@@ -51,7 +51,7 @@ const TimelineSection = () => {
   });
 
   return (
-    <section ref={containerRef} id="timeline" className="py-24 bg-gray-50">
+    <section ref={containerRef} id="timeline" className="py-24 bg-gray-50 overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <motion.h2
