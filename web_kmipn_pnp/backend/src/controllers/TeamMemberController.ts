@@ -14,6 +14,7 @@ import { $Enums } from "@prisma/client";
 import { pusher } from "../config/pusher";
 import { createObjectCsvWriter } from "csv-writer";
 import { format } from "@fast-csv/format";
+import { uploadFileToDrive } from "../services/GoogleDriveServices";
 
 type clientInput = {
     nama_anggota: string,
@@ -69,19 +70,19 @@ export const saveTeamMember = async (req: Request, res: Response) => {
 
         if (!body.nama_dosen || !body.nip_dosen || !body.nama_tim || !body.kategori_lomba || !body.asal_politeknik) {
 
-            const files = req.files as Record<string, Express.Multer.File[]>;
-            for (const key in files) {
-                files[key].forEach((file: Express.Multer.File) => {
-                    const filePath = path.join(__dirname, '../../', file.path);
-                    fs.unlink(filePath, (err) => {
-                        if (err) {
-                            console.error("Error while deleting file:", err);
-                        } else {
-                            console.log(`File ${file.filename} deleted successfully`);
-                        }
-                    });
-                });
-            }
+            // const files = req.files as Record<string, Express.Multer.File[]>;
+            // for (const key in files) {
+            //     files[key].forEach((file: Express.Multer.File) => {
+            //         const filePath = path.join(__dirname, '../../', file.path);
+            //         fs.unlink(filePath, (err) => {
+            //             if (err) {
+            //                 console.error("Error while deleting file:", err);
+            //             } else {
+            //                 console.log(`File ${file.filename} deleted successfully`);
+            //             }
+            //         });
+            //     });
+            // }
 
             return res.status(400).json({
                 success: false,
@@ -100,26 +101,58 @@ export const saveTeamMember = async (req: Request, res: Response) => {
             institution: body.asal_politeknik
         }
 
-        const files = req.files as Record<string, Express.Multer.File[]>;
 
         const user = await userLogin(req);
-
+        const folderId = process.env.GOOGLE_DRIVE_FOLDER_KTM_ID || ""
+        const files = req.files as Record<string, Express.Multer.File[]>;
         const clientInputMembers: clientInput[] = body.members;
-        const dataMembers: members[] = clientInputMembers.map((member, index: number) => {
-            const fieldName = `ktm_agg${index + 1}`;
-            const file = files[fieldName]?.[0];
-            return {
-                teamId: 0,
-                userId: index === 0 ? user.id : null,
-                no_WA: member.no_wa,
-                prodi: member.prodi,
-                email: member.email,
-                role: index === 0 ? "leader" : "member",
-                nim: member.nim,
-                name: member.nama_anggota,
-                fileKTM: `${process.env.BASEURl}/${file.path.split("/").filter((filter) => filter !== "public").join("/")}`
+        let dataMembers: members[] = [];
+        let index = 0;
+
+        for (const fieldName in files) {
+            if (Object.prototype.hasOwnProperty.call(files, fieldName)) {
+                const file = files[fieldName][0];
+                const fileBuffer = file.buffer;
+                const fileName = file.originalname;
+                const mimeType = file.mimetype;
+                const member = clientInputMembers[index];
+                const uploadResult = await uploadFileToDrive(fileBuffer, fileName, mimeType, folderId)
+
+                dataMembers.push({
+                    email: member.email,
+                    userId: index === 0 ? user.id : null,
+                    no_WA: member.no_wa,
+                    prodi: member.prodi,
+                    teamId: 0,
+                    role: index === 0 ? "leader" : "member",
+                    name: member.nama_anggota,
+                    nim: member.nim,
+                    fileKTM: `https://drive.google.com/uc?id=${uploadResult.id}`
+                })
+
+                index++;
             }
-        })
+        }
+
+        console.log(dataMembers);
+
+
+        // const clientInputMembers: clientInput[] = body.members;
+        // const dataMembers: members[] = clientInputMembers.map((member, index: number) => {
+        //     const fieldName = `ktm_agg${index + 1}`;
+        //     const file = files[fieldName]?.[0];
+        //     return {
+        //         teamId: 0,
+        //         userId: index === 0 ? user.id : null,
+        //         no_WA: member.no_wa,
+        //         prodi: member.prodi,
+        //         email: member.email,
+        //         role: index === 0 ? "leader" : "member",
+        //         nim: member.nim,
+        //         name: member.nama_anggota,
+        //         fileKTM: `${process.env.BASEURl}/${file.path.split("/").filter((filter) => filter !== "public").join("/")}`
+        //     }
+        // })
 
         const tr = db.$transaction(async () => {
             const newLecture = await db.lecture.create({
@@ -128,6 +161,7 @@ export const saveTeamMember = async (req: Request, res: Response) => {
                     nip: dataLecture.nip
                 }
             });
+
             const newTeam = await db.team.create(
                 {
                     data:
@@ -141,6 +175,7 @@ export const saveTeamMember = async (req: Request, res: Response) => {
             await db.teamMember.createMany({ skipDuplicates: true, data: dataMembers })
             return { team_name: newTeam.name }
         })
+
         return res.status(201).json({
             success: true,
             statusCode: 201,

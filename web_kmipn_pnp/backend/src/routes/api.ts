@@ -60,10 +60,22 @@ router.get("/proposals", authenticateJWT, getAllproposal);
 router.delete("/proposals/:id", authenticateJWT, deleteProposal);
 router.put("/proposals/:id", authenticateJWT, updateProposal);
 router.get("/download-proposal", authenticateJWT, downloadAllProposal);
+// router.post(
+//     "/save-team-member",
+//     authenticateJWT,
+//     uploadFile.fields([
+//         { name: 'ktm_agg1', maxCount: 1 },
+//         { name: 'ktm_agg2', maxCount: 1 },
+//         { name: 'ktm_agg3', maxCount: 1 }
+//     ]),
+//     saveTeamMember
+// );
+
+
 router.post(
     "/save-team-member",
     authenticateJWT,
-    uploadFile.fields([
+    uploadDrive.fields([
         { name: 'ktm_agg1', maxCount: 1 },
         { name: 'ktm_agg2', maxCount: 1 },
         { name: 'ktm_agg3', maxCount: 1 }

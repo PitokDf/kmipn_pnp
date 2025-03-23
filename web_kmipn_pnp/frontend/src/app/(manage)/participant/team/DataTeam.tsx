@@ -50,7 +50,7 @@ export default function DataTeam() {
                                         <td>{member.nim}</td>
                                         <td>{member.prodi}</td>
                                         <td>
-                                            <a href={member.fileKTM} className="link link-primary" target="_blank">{member.fileKTM.split("/")[4]}</a>
+                                            <a href={member.fileKTM} className="link link-primary" target="_blank">Lihat foto</a>
                                         </td>
                                     </tr>
                                 ))

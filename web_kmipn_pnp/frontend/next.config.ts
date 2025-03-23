@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
                 protocol: "http",
                 // pathname: "/**",
                 // port: "2003"
+            },
+            {
+                hostname: "drive.google.com",
+                protocol: "https",
             }
         ]
     }
