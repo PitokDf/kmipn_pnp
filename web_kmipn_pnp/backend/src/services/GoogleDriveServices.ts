@@ -59,6 +59,8 @@ export async function uploadFileToDrive(fileBuffer: Buffer, fileName: string, mi
         return response.data
     } catch (error) {
         console.info(`uploading file '${fileName}' to drive, failed`);
+        console.log(error);
+
         throw error
     }
 }
