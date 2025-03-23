@@ -1,7 +1,7 @@
 import { google } from "googleapis";
 import { Readable } from "node:stream";
 
-const PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY || "";
+const PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n') || "";
 const CLIENT_EMAIL = process.env.GOOGLE_CLIENT_EMAIL || ""
 
 const auth = new google.auth.GoogleAuth({
