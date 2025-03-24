@@ -174,7 +174,7 @@ export const saveTeamMember = async (req: Request, res: Response) => {
             })
             await db.teamMember.createMany({ skipDuplicates: true, data: dataMembers })
             return { team_name: newTeam.name }
-        })
+        }, { timeout: 10000 })
 
         return res.status(201).json({
             success: true,
