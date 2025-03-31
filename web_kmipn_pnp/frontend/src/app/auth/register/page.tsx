@@ -8,7 +8,7 @@ export const metadata = {
 export default function LoginPage() {
     return (
         <div className="flex justify-center items-center h-screen">
-            <div className="mx-auto flex w-full max-w-lg flex-col rounded-xl border border-border bg-backgroundSecondary p-6">
+            <div className="bg-white dark:bg-zinc-800 shadow-md rounded p-8 w-full max-w-md">
                 <div className="flex flex-col items-center mb-3">
                     <h1 className="text-3xl font-semibold">Register</h1>
                     <p className="text-sm">Buat akunmu</p>

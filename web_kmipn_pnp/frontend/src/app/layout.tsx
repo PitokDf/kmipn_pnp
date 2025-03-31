@@ -89,9 +89,6 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen `}
       >
         <DefaultLayout>
-          <div className="fixed z-[9999] left-2 bg-white bg-opacity-90 text-blue-600 rounded-[12px] font-bold  px-5 bottom-1 invert py-3">
-            <span className="text-md">Development</span>
-          </div>
           {children}
         </DefaultLayout>
       </body>

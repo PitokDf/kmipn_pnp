@@ -118,7 +118,7 @@ const Footer = () => {
 
                 {/* Credits */}
                 <div className="mt-10 text-center text-gray-500 text-sm">
-                    <p>Developed by <span className="font-bold text-gray-300">Pito Desri Pauzi</span> © {new Date().getFullYear()}. All Rights Reserved.</p>
+                    <p>Developed by <span className="font-bold text-gray-300"><a target="_blank" href="https://github.com/PitokDf">Pito Desri Pauzi</a></span> © {new Date().getFullYear()}. All Rights Reserved.</p>
                 </div>
             </div>
         </footer>

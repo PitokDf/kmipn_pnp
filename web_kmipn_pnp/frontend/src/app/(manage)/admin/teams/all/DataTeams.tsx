@@ -12,7 +12,6 @@ export default function DataTeams() {
 
     // if (!data) { console.log("loading"); return }
     if (error) { console.log("terjadi kesalahan"); return }
-    console.log(data);
 
     const teams: teamMemberType[] = data?.data || [];
     const filterTeams = teams.map((team, index) => ({
