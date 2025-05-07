@@ -26,8 +26,6 @@ app.use(cors({
     credentials: true
 }));
 
-console.log(process.env.FRONTEND_URL);
-
 app.use(express.json());
 app.use('/api/v1/', apiLimiter, router);
 

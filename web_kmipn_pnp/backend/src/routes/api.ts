@@ -33,6 +33,9 @@ router.get('/', authenticateJWT, (req, res) => {
     });
 });
 
+console.log("Frontend URL: ", process.env.FRONTEND_URL);
+
+
 router.get('/users', authenticateJWT, AllUser);
 router.post('/users', authenticateJWT, addUserValidator, addUser);
 router.get('/users/:id', authenticateJWT, GetUserById);
