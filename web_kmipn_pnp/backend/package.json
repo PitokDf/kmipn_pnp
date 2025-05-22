@@ -15,6 +15,9 @@
     "fullstack",
     "korporat"
   ],
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "author": "Pito Desri Pauzi",
   "license": "MIT",
   "dependencies": {
