@@ -2,14 +2,13 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:latest
-    container_name: postgres-db
+    image: postgres:15.12-alpine3.21
+    container_name: db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 121203
-      POSTGRES_DB: kmipn_db
     ports:
-      - "6543:6543"
+      - "5433:5432"
     volumes:
       - pgdata:/var/lab/postgresql/data
   
@@ -20,11 +19,10 @@ services:
       - postgres
     ports:
       - "2003:2003"
-    environment:
-      DATABASE_URL: "postgresql://postgres:121203@postgres:6543/kmipn_db"
+    env_file:
+      - ./backend/.env
     volumes:
       - ./backend:/app
-    command: ["npm", "run", "dev"]
 
   frontend:
     build: ./frontend
@@ -33,8 +31,8 @@ services:
       - backend
     ports:
       - "3000:3000"
-    environment:
-      NEXT_PUBLIC_API_URL: "http://localhost:3001"
+    env_file:
+      - ./frontend/.env
 
 volumes:
   pgdata:
